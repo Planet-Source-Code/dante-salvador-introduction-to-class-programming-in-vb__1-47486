@@ -1,0 +1,1138 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Intro Series3</title>
+
+</head>
+
+<body onload="vbscript:KJ_start()">
+
+<blockquote>
+
+<h2 align="center">Introduction to Class Programming in Visual Basic</h2>
+<p align="left">In our previous series article, we talk about enumerated
+properties, how we can use it to make our class more readable and can be easily
+maintain.&nbsp; We also discusses about properties that return an object and
+learn the use of another property procedure, Property Set.&nbsp; We also talk
+about properties that return a variant type and how to make our class more
+flexible.&nbsp; Lastly, we talk about some advance useful method to add
+functionality to our class.</p>
+<p align="left">The following topic tackles about Collection in general and
+how to incorporate collection to make class mimic the functionality of
+Collection object.&nbsp;</p>
+<h3>Collection In General</h3>
+<p>If you are familiar with Collection, or how to use collection in Visual
+Basic, my suggestion is to go to the next section.&nbsp; The following text are
+discussion about Collection in general.</p>
+<p>Collection can be used to store groups of related data, like array and
+user-defined type.&nbsp; Collections is automatically exposed by Visual Basic,
+because VBA library are exposed by the IDE when you start Visual Basic. Like
+most of the object, Collection
+must be declared and then created.&nbsp; Or you can declare an auto-instancing
+collection with one single line of code:</p>
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>' Declare collection object
+Dim colStudent As Collection
+' Initiate a collection object
+Set colStudent = New Collection
+'or
+' Use auto-instancing
+Dim colStudent As New Collection</pre>
+      </td>
+    </tr>
+</table>
+
+<p>Each Collection object comes with properties and methods that you can use
+insert to, delete to, and retrieve the items in the collection.&nbsp; These properties and methods provide only the most basic services for collections</p>
+
+<p>You can use the <b> Add</b> method to add an item to a collection. The syntax is:</p>
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>Sub Add (item As Variant [, key As Variant] [, before As Variant] [, after As Variant] )</pre>
+      </td>
+    </tr>
+</table>
+
+<p>This method expects the <i> item</i> you're adding and a <i>key</i> that will be
+associated with that <i>item</i>.&nbsp;You should be noted, that <i>key</i>
+argument accept only a <i>string</i> value, meaning you cannot pass a numeric
+value which usually used by the database programmer as unique key for a table
+such as <b>AutoNumber</b> field.&nbsp; To circumvent for this constraint, you
+can use the <i> CStr</i> function to convert them to <i> strings</i> before passing them
+<i>Add</i> method.&nbsp;&nbsp; <i>Add </i>method usually add the new value at
+the end of the collection, but you might want where exactly the item can be
+stored by using either the <i>before </i>argument or the <i>after </i>argument:</p>
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>colStudent.Add &quot;Oscar Solomon Enriquez&quot;, &quot;Momon&quot;
+colStudent.Add &quot;Oscar Roy Enriquez&quot;, &quot;Roy&quot;, &quot;Momon&quot;   ' Add this before &quot;Momon&quot;
+colStudent.Add &quot;John Oscar Enriquez&quot;, &quot;Eboy&quot;, &quot;Roy&quot;   ' Add this before &quot;Roy&quot;
+colStudent.Add &quot;Katkat Aniversario&quot;, &quot;Kat&quot;
+colStudent.Add &quot;Joyce Ann Casayuran&quot;, &quot;Joan&quot;, &quot;Eboy&quot;  ' Add this before &quot;Eboy&quot;
+colStudent.Add &quot;Samantha Aniversario&quot;, &quot;Sam&quot;, , &quot;Kat&quot; ' Add this after &quot;Kat&quot;
+colStudent.Add &quot;Dante Salvador&quot;, &quot;teng&quot;, &quot;Joan&quot;       ' Add this before &quot;Joan&quot;</pre>
+      </td>
+    </tr>
+</table>
+
+<p>
+My suggestion, you should not use this approach, because it slow down the <i> Add</i>
+method.&nbsp; The string <i>key</i> argument is optional, meaning you can specify it or
+not.&nbsp; But you should be aware that if you specify it and there is another
+item with the same key value, <i> Add</i> method will raise an error (<b>457-This
+key is already associated with an element of this collection</b>).</p>
+<p>You can retrieve the item the you added by using the <i>Item</i>
+method.&nbsp;The syntax is:</p>
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>[Set] variable = CollectionObject.Item(index)</pre>
+      </td>
+    </tr>
+</table>
+
+<p><i>Item</i> method is the default member of the Collection, so you can omit
+it if you want.&nbsp; You can read the <i>Items</i> in a collection by using
+their numeric indices or their string <i>keys</i>.&nbsp; My suggestion, always
+access a Collection's items using their string <i>keys</i> rather than their
+numeric indices.&nbsp; In fact, you usually easily remember the name of your
+classmates rather than their Student ID number. Right?!&nbsp;&nbsp; You should
+be noted that you may get an error <b>9</b> &quot;<b>Subscript out of range</b>&quot;,
+if you pass a numeric index that's either negative or greater than the number of
+items currently in the collection.&nbsp; And if you pass a nonexistent string
+key, you get error <b>5 &quot;Invalid procedure call or argument.&quot;</b></p>
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>' This will print &quot;Katkat Aniversario&quot;
+Debug.Print colStudent(6)
+Debug.Print colStudent(&quot;Kat&quot;)
+Debug.Print colStudent.Item(6)
+Debug.Print colStudent.Item(&quot;Kat&quot;)</pre>
+      </td>
+    </tr>
+</table>
+
+<p>Use the <i> Remove</i> method to delete an item from a collection. The syntax is:</p>
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>collectionObject.Remove index</pre>
+      </td>
+    </tr>
+</table>
+
+<p>The <i> index</i> argument can either be the position of the item you want to delete, or the item’s
+<i>key</i>. Of course, you can get the same error numbers, if the numeric index
+or nonexistent string key is not in the current location.</p>
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>' remove &quot;Dante Salvador from the collection&quot;
+colStudent.Remove (&quot;teng&quot;)
+colStudent.Remove (1)</pre>
+      </td>
+    </tr>
+</table>
+
+<p>
+You can use the <i>Count</i> method to returns the number of items in the
+collection:</p>
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>Debug.Print colStudent.Count </pre>
+      </td>
+    </tr>
+</table>
+
+<p>
+<a name="bkmrk2"></a>
+You usually use the <i>Count</i> method with <i>For...Next</i> loop to iterate
+to the Collection:</p>
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>Sub PrintCollection(col As Collection)
+    Dim i As Integer
+    
+    For i = 1 To col.<b>Count</b>
+        Debug.Print col.Item(i)
+    Next
+End Sub</pre>
+      </td>
+    </tr>
+</table>
+
+<p>
+<a name="bkmrk3"></a>
+While the above code works, it is better to perform the same task, based on the <i>For
+Each…Next</i> loop by using <i>Variant</i> type controlling variable, because&nbsp;
+<i>Variant</i> can host any value that had been added to the Collection.</p>
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>Sub PrintCollectionByVariant(col As Collection)
+    Dim varControl As Variant
+    
+    For Each varControl In col
+        Debug.Print varControl
+    Next
+End Sub</pre>
+      </td>
+    </tr>
+</table>
+
+<p>But if you are sure that the Collection contains only a given class of
+objects (e.g.. Student), using a controlling variable of a specific object type
+offers better performance than a <i>Variant</i> variable. And this is the next
+topic that we will discuss, <b>Collection Class</b>.</p>
+<h3>Object Relationship</h3>
+<p>As we have discussed in the <a href="file:///B:/Intro%20Series1.htm"> first article
+series</a>,&nbsp; in order to develop a
+data model, we begin with the contention that the real world consists of <i>entities</i>
+and <i>relationship.&nbsp;</i> An <b>entity</b> is defined as a live being,
+object or abstraction that can be described in terms of certain characteristic,
+and is similar to, but distinct from, entities of the same type. A <b>relationship</b>
+is an association among member of one or more entity set. A relationship set is
+a set of similar but distinct relationships of the same type. For example, class
+enrollment can be regarded as a relationship set between the entities sets of
+students and courses. The fact that you own a book can be seen as a relationship
+between you, a member of the entity set of students, and your book, a member of
+the entity set of textbooks.</p>
+<p>If you haven't noticed, we already establish a <i> one-to-one relationship</i> in
+previous articles (between <b>Student</b> and <b>Address</b>  object).&nbsp; Establishing
+a relationship between this two objects is simply providing the former (<b>Student</b>)
+object with an object (<b>Address</b>) property that points to the latter. (For
+information about this topic see <a href="file:///B:/Intro%20Series2.htm"> Series Article 2</a>, because we will not discuss
+this topic again).&nbsp; When we implement the <i> one-to-one</i> relationship between <i>Student</i>
+and <i>Address</i> object (<i>entities</i>), we assume that we are sure that the
+relationship between this entities (object) is either true for all the time or
+if it does change, we don't care about the past value.&nbsp;&nbsp;For example:&nbsp; The relationship of <i>Student</i> and <i>Address</i> object is
+true only at a specific moment in time.&nbsp; However, Student whose renting a dormitory
+(<i>Address</i>) might find other dormitory (other <i>Address</i>).&nbsp; Implementing
+<i>
+one-to-one</i> relationship have no way of determining the history of <i>Student</i>
+address, so we might not care and it's up to us to decide.&nbsp; <i>One-to-One</i>
+relationship is very common and useful abstract concepts.&nbsp; Usually they are
+used to reduce the number of attributes (<i>member</i>) in a entity (<i>class</i>/<i>object</i>),
+which what we did in our previous example.&nbsp;In fact, do you know any
+student who religiously telling their school that their address changes?!</p>
+<p>Another form of relationship that you can use is <i>One-to-Many </i>relationship,
+where in a single instance of one entity (object) can be associated with zero,
+one or many instances of another entity (object). And this type of relationship
+is the most common, because there are undetermined number of instance where you
+can use it.&nbsp; For example, in an Order Entry Application.&nbsp; There are
+two ways to implement this kind of relationship: using an array or using a
+collection.&nbsp; For this discussion, we are going to use the collection,
+because collection post a lot of advantage than array.</p>
+<h3>
+Building One-To-Many Class Relationship</h3>
+<p>We will take a simple example to demonstrate <i>One-To-Many</i> relationship
+between object.&nbsp;&nbsp; Consider <i>Course</i> and <i>Subject</i> entity
+that might constitute to your school <i>Enrollment System</i>.&nbsp; A <i>Course</i>
+(object) can be taken up by a <i>Student</i> (object), in addition&nbsp; a <i>Course</i>&nbsp;
+have different <i>Subject</i> (object) for that specific <i>Course</i> that the
+student have taken.&nbsp; Meaning a Computer Science student cannot take a
+subject pertaining to a Nursing course.&nbsp; So <i>Course</i> object might
+have point to multiple <i>Subject</i> that a Student might take in a particular
+semester. This might be subject with prerequisites or subject that can be taken
+only by a second year level student.&nbsp;&nbsp; In this specific example, a <i>Subject</i>
+is a supporting entity which holds information about the subject facts such as <i>subject
+code</i>, <i>subject description, subject unit</i>, and so on, that is specific
+to the that <i>Course</i>.&nbsp; The following are simple implementation of <i>One-To-Many
+</i>relationship.&nbsp; We need first to construct the supporting entity
+(Subject class) that made up the collection of subject for specific
+Course.&nbsp;</p>
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>' In Subject class module
+Private m_SubjectID As Long
+Private m_SubjectCode As String
+Private m_SubjectDescription As String
+Private m_SubjectUnit As Long
+
+Public Sub InitSubject(Optional ByVal SubjectID As Variant, _
+                       Optional ByVal SubjectCode As Variant, _
+                       Optional ByVal SubjectDescription As Variant, _
+                       Optional ByVal SubjectUnit As Variant)
+    If Not IsMissing(SubjectID) Then Me.SubjectID = SubjectID
+    If Not IsMissing(SubjectCode) Then Me.SubjectCode = SubjectCode
+    If Not IsMissing(SubjectDescription) Then Me.SubjectDescription = SubjectDescription
+    If Not IsMissing(SubjectUnit) Then Me.SubjectUnit = SubjectUnit
+End Sub
+
+Public Property Let SubjectUnit(ByVal lngSubjectUnit As Long)
+    m_SubjectUnit = lngSubjectUnit
+End Property
+
+Public Property Get SubjectUnit() As Long
+    SubjectUnit = m_SubjectUnit
+End Property
+
+Public Property Let SubjectDescription(ByVal strSubjectDescription As String)
+    If Len(strSubjectDescription) = 0 Then Err.Raise 5
+    m_SubjectDescription = strSubjectDescription
+End Property
+
+Public Property Get SubjectDescription() As String
+    SubjectDescription = m_SubjectDescription
+End Property
+
+Public Property Let SubjectCode(ByVal strSubjectCode As String)
+    If Len(strSubjectCode) = 0 Then Err.Raise 5
+    m_SubjectCode = strSubjectCode
+End Property
+
+Public Property Get SubjectCode() As String
+    SubjectCode = m_SubjectCode
+End Property
+
+Public Property Let SubjectID(ByVal lngSubjectID As Long)
+    m_SubjectID = lngSubjectID
+End Property
+
+Public Property Get SubjectID() As Long
+    SubjectID = m_SubjectID
+End Property
+</pre>
+<pre>' In a public BAS module
+Public Function New_Subject(Optional ByVal SubjectID As Variant, _
+                            Optional ByVal SubjectCode As Variant, _
+                            Optional ByVal SubjectDescription As Variant, _
+                            Optional ByVal SubjectUnit As Variant) As Subject
+
+    Set New_Subject = New Subject
+    New_Subject.InitSubject SubjectID, SubjectCode, SubjectDescription, SubjectUnit
+End Function</pre>
+      </td>
+    </tr>
+</table>
+
+<p>After creating our supporting class, we can now build the <i> Course</i> object
+that contains the following property such as <i> Course ID</i>, <i> Course Code</i>,<i> Course
+Description</i> and so on.&nbsp; Of course, you can add some properties that you
+think relevant for the <i> Course</i> object.&nbsp; For this example, we are just laying
+out the concepts.</p>
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>' In Course class module
+Private m_CourseID As Long
+Private m_CourseCode As String
+Private m_CourseDescription As String
+<b>Public Subjects As New Collection</b>    ' this is the collection of Subject
+
+Public Sub InitCourse(Optional ByVal CourseID As Variant, _
+                      Optional ByVal CourseCode As Variant, _
+                      Optional ByVal CourseDescription As Variant)
+    If Not IsMissing(CourseID) Then Me.CourseID = CourseID
+    If Not IsMissing(CourseCode) Then Me.CourseCode = CourseCode
+    If Not IsMissing(CourseDescription) Then Me.CourseDescription = CourseDescription
+End Sub
+
+Public Property Let CourseDescription(ByVal strCourseDescription As String)
+    If Len(strCourseDescription) = 0 Then Err.Raise 5
+    m_CourseDescription = strCourseDescription
+End Property
+
+Public Property Get CourseDescription() As String
+    CourseDescription = m_CourseDescription
+End Property
+
+Public Property Let CourseCode(ByVal strCourseCode As String)
+    If Len(strCourseCode) = 0 Then Err.Raise 5
+    m_CourseCode = strCourseCode
+End Property
+
+Public Property Get CourseCode() As String
+    CourseCode = m_CourseCode
+End Property
+
+Public Property Let CourseID(ByVal lngCourseID As Long)
+    If lngCourseID = 0 Then Err.Raise 5
+    m_CourseID = lngCourseID
+End Property
+
+Public Property Get CourseID() As Long
+    CourseID = m_CourseID
+End Property
+</pre>
+<pre>' In a public BAS module
+Public Function New_Course(Optional ByVal CourseID As Variant, _
+                           Optional ByVal CourseCode As Variant, _
+                           Optional ByVal CourseDescription As Variant) As Course
+    Set New_Course = New Course
+    New_Course.InitCourse CourseID, CourseCode, CourseDescription
+End Function
+</pre>
+      </td>
+    </tr>
+</table>
+
+<p>As you can see in this example, the <i>Course</i> class contain a public
+collection object named <i>Subjects</i> (collection object typically named
+plural) to hold the collection of <i>Subject</i> object of that particular <i>Course</i>.&nbsp;
+Another point that you can see, is that the collection object&nbsp; <i>Subjects</i>
+is <i>auto-instancing</i> object.&nbsp; You can exclude this but you should
+remember to issue a <b>Set</b> command when you commence to interact with
+it.&nbsp; The code below show how client use this technique:</p>
+  <table cellPadding="5" width="691">
+    <tr>
+      <td bgcolor="#E2E2E2" width="675">
+
+<pre><a name="bkmrk1"></a>' In the client form
+
+' Declare a Course object
+Dim Course As Course
+' Declare a Subject object
+' to be use as controlling object
+Dim Subject As Subject
+
+' Create a Course object
+Set Course = New_Course(1, &quot;BSCS&quot;, &quot;Bachelor of Science in Computer Science&quot;)
+
+' Add the Subject object to the collection object of Course object
+Course.<b>Subjects</b>.<b>Add</b> New_Subject(1, &quot;COM1&quot;, &quot;Introduction to Computer&quot;, 3), &quot;COM1&quot;
+Course.<b>Subjects</b>.<b>Add</b> New_Subject(2, &quot;P101&quot;, &quot;Programming Fundamentals&quot;, 3), &quot;P101&quot;
+Course.<b>Subjects</b>.<b>Add</b> New_Subject(2, &quot;A101&quot;, &quot;Algorithm Fundamentals&quot;, 3), &quot;A101&quot;
+
+' Show some information
+With Course
+    Debug.Print &quot;Course ID   : &quot; &amp; .CourseID
+    Debug.Print &quot;Course Code : &quot; &amp; .CourseCode
+    Debug.Print &quot;Description : &quot; &amp; .CourseDescription
+    Debug.Print &quot;====        ===========          ==== &quot;
+    Debug.Print &quot;Code        Description          Unit&quot;
+    Debug.Print &quot;====        ===========          ==== &quot;
+    ' Iterate to the collection of Subject object within Course object
+    For Each Subject In .Subjects
+        Debug.Print Subject.SubjectCode &amp; &quot; : &quot; &amp; _
+                    Subject.SubjectDescription &amp; &quot; : &quot; &amp; _
+                    Subject.SubjectUnit
+    Next
+End With</pre>
+      </td>
+    </tr>
+</table>
+
+<p>You can easily add some useful <i>Property</i> or <i>Function</i> to our
+object <i>Course </i>like, the total number of units of subject in this
+particular course:</p>
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre><a name="bkmrk4"></a>' In Course class module
+Public Property Get TotalSubjectUnit() As Long
+    ' Return the Total subject unit
+    Dim Subject As Subject  ' controlling object
+    Dim Total As Long       ' total so far
+    
+    ' Iterate to the collection
+    For Each Subject In Subjects
+        ' Compute the sum
+        Total = Total + Subject.SubjectUnit
+    Next
+    ' Return total subject unit some
+    TotalSubjectUnit = Total
+End Property
+
+' In the client form
+Debug.Print Course.TotalSubjectUnit</pre>
+      </td>
+    </tr>
+</table>
+
+<p>Even thought, collection can greatly helps us in maintaining the related
+object, it has a serious problem.&nbsp; Because collection store their values in
+<b> Variant</b> type, meaning collection can accept anything you add on
+them. For example:</p>
+
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644"><pre>' Declare an Address object
+Dim Address As Address
+' Declare a Course object
+Dim Course As Course    
+' Initiate and create Address object
+Set Address = New_Address(&quot;Block 10 Lot 26, Molave Street, &quot; &amp; _
+                          &quot;Calendola Village&quot;, _
+                          &quot;San Pedro&quot;, _
+                          &quot;Laguna&quot;, _
+                          &quot;4023&quot;)
+' Add the Address object to the collection object of Course object
+Course.Subjects.Add <b>Address</b>              ' No Error reported by Visual Basic</pre>
+      </td>
+    </tr>
+</table>
+
+<p>Because we don't have any control how the <b>Add</b> method is implemented in
+native <b>VBA Collection object</b>, the only way to ensure the robustness of
+your class is by informing the user of your class that they should add only an <i>item</i>
+that is specific for your class expect.&nbsp; But in reality this is somehow
+impossible.&nbsp; The solution to this problem is to create your own collection
+that closely similar to native VBA Collection objects.&nbsp; In this way you are
+in control in its implementation,&nbsp; you can control their syntax for their
+methods and properties and&nbsp; you can check what's being added to your
+collection class.&nbsp; To do this, your collection class must keeps a reference
+to a private collection variable (for our example: <b>Subjects</b>) and gives
+similar method and properties such as <i>Add</i>, <i>Remove</i>, <i>Count</i>
+and <i>Item</i>, so that the client code think it's interacting with a the
+native Collection object.&nbsp; You can even add some useful methods, such as <i>IsExists</i>
+method that return <i>True</i> if an item exists is in the collection, <i>RemoveAll</i>
+or <i>ClearAll</i> that remove all the items in the collection, and <i>Replace</i>
+method that replace the item of an existing collection item, in which the native
+collection does not support. To begin with, you need the following skeleton
+method and property below:</p>
+
+<ul>
+  <li><b>To create Subjects Collection class</b></li>
+</ul>
+<blockquote>
+  <ol>
+    <li>On the <b>Project menu</b>, click <b>Add Class Module</b>.&nbsp;
+    <li>In the <b>Add Class Module</b> dialog box, select <b>Class Module</b>,
+      then click <b>Open</b>.&nbsp;
+    <li>In the <b>Properties window</b>, set the <b>Name</b> property for the
+      class module to <b>Subjects</b>.&nbsp; Traditionally, the name of your
+      custom collection class must be plural in form.
+    <li>In the <b>Code window</b>, type the following:</li>
+  </ol>
+  <blockquote>
+    <table cellPadding="5" width="590">
+      <tbody>
+        <tr>
+          <td bgColor="#e2e2e2" width="672">
+            <pre>Private m_Subjects As New Collection
+
+Sub Add(newSubject As Subject, Optional Key As Variant, _
+        Optional Before As Variant, Optional After As Variant)
+    ' Call Subject InitSubject method
+    newSubject.InitSubject newSubject.SubjectID, newSubject.SubjectCode, _
+                           newSubject.SubjectDescription, newSubject.SubjectUnit
+    ' Add to the private collection only if no error was raised by InitSubject
+    m_Subjects.Add newSubject, Key, Before, After
+End Sub
+
+Sub Remove(Index As Variant)
+   m_Subjects.Remove Index 
+End Sub
+
+Property Get Count() As Long
+   Count = m_Subjects.Count 
+End Property
+
+Function Item(Index As Variant) As Subject
+   ' Ignore error, return Nothing, if Index is not found
+   On Error Resume Next
+   Set Item = m_Subjects.Item(Index)
+End Function</pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </blockquote>
+</blockquote>
+<h3> <font face="Courier New"> Add</font> Method</h3>
+  <table cellPadding="5" width="660" height="29">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644" height="17">
+
+<pre>Add newSubject As Subject, [Optional Key As Variant], _
+    [Optional Before As Variant], [Optional After As Variant]</pre>
+      </td>
+    </tr>
+</table>
+
+<p>As you can see the syntax of our <b>Add</b> method is similar to the native
+Collection <b>Add</b> syntax.&nbsp; The only difference is that the first
+argument expect a type Object <i>Subject</i>.&nbsp; This way we can be sure that
+our method will accept only a Subject object, otherwise it will resulted to an
+error-<b><i>Type Mismatch</i></b>.&nbsp; In our previous article, we emphasize
+that your class must be properly encapsulated, meaning, a class must protect
+itself and validate its own data.&nbsp; Because you collection class is a class,
+therefore it is not except from this rule.&nbsp; So how can we validate <i>newSubject</i>
+argument of <i>Add</i> method?&nbsp; We can to this because <i>newSubject</i> is of type <i>Subject</i>,
+so it can validate himself by calling its <i>InitSubject</i> method, before adding
+it to collection class private collection variable <i>m_Subjects</i>:</p>
+
+<h3> <font face="Courier New"> Item</font> Method</h3>
+  <table cellPadding="5" width="660" height="29">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644" height="17">
+
+<pre>Items(Index As Variant) As Subject</pre>
+      </td>
+    </tr>
+</table>
+
+<p>The <i> Items</i> method accept an Index variant type which is similar
+to <i>Item</i> method of native Collection object, but our method return
+specific object, <i>Subject</i>, not variant.. You can read the <i>Items</i> in a collection by using
+their numeric indices or their string <i>keys</i> (if any).&nbsp; Unlike a
+native collection which raises an error if the numeric index or nonexistent
+string key is not in the current collection.&nbsp; Our Item method will simple
+return <i> Nothing</i> if the item doesn't exist.&nbsp;&nbsp;</p>
+
+<h3> <font face="Courier New">Count</font> Property</h3>
+
+  <table cellPadding="5" width="660" height="29">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644" height="17">
+
+<pre>Count As Long</pre>
+      </td>
+    </tr>
+</table>
+
+<p>The <i>Count</i> property simply returns the number of <i> Subject</i> items in our
+collection class.&nbsp; You should be noted, that this property is a <i>Read-Only
+Property.</i></p>
+
+<h3> <font face="Courier New">Remove</font> Method</h3>
+
+  <table cellPadding="5" width="660" height="29">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644" height="17">
+
+<pre>Remove(Index As Variant)</pre>
+      </td>
+    </tr>
+</table>
+
+<p>The <i> Remove</i> method remove an&nbsp; item from a Collection, this method accepts
+either a numeric <i> index</i> or a string <i>key</i>.&nbsp; This method raises the same error
+number as a native collection, if the numeric index or nonexistent
+string key is not in the current collection</p>
+
+<p>We can now use it just like the same collection
+object native to Visual Basic.&nbsp; But we have to change our Course object declaration
+:</p>
+
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>' In Course class module
+Private m_CourseID As Long
+Private m_CourseCode As String
+Private m_CourseDescription As String
+<b>Public Subjects As New Subjects</b>    ' declare our custom collection class
+
+' other code omitted....</pre>
+      </td>
+    </tr>
+</table>
+
+<p>Now we can use it&nbsp; in our client form, changing only the code that shows
+the <i>Course</i> information indicated in bold text</p>
+
+  <table cellPadding="5" width="691">
+    <tr>
+      <td bgcolor="#E2E2E2" width="675">
+
+<pre>' In the client form
+
+' Declare a Course object
+Dim Course As Course
+' Declare a Subject object
+' to be use as controlling object
+Dim Subject As Subject
+
+' Create a Course object
+Set Course = New_Course(1, &quot;BSCS&quot;, &quot;Bachelor of Science in Computer Science&quot;)
+
+' Add the Subject object to the collection object of Course object
+Course.Subjects.Add New_Subject(1, &quot;COM1&quot;, &quot;Introduction to Computer&quot;, 3), &quot;COM1&quot;
+Course.Subjects.Add New_Subject(2, &quot;P101&quot;, &quot;Programming Fundamentals&quot;, 3), &quot;P101&quot;
+Course.Subjects.Add New_Subject(2, &quot;A101&quot;, &quot;Algorithm Fundamentals&quot;, 3), &quot;A101&quot;
+
+' Show some information
+With Course
+    Debug.Print &quot;Course ID   : &quot; &amp; .CourseID
+    Debug.Print &quot;Course Code : &quot; &amp; .CourseCode
+    Debug.Print &quot;Description : &quot; &amp; .CourseDescription
+    Debug.Print &quot;====        ===========          ==== &quot;
+    Debug.Print &quot;Code        Description          Unit&quot;
+    Debug.Print &quot;====        ===========          ==== &quot;
+
+  '   Iterate to the collection of Subject object within Course object
+<b>    For i = 1 To .Subjects.Count
+        Debug.Print .Subjects.Item(i).SubjectCode &amp; &quot; : &quot; &amp; _
+                    .Subjects.Item(i).SubjectDescription &amp; &quot; : &quot; &amp; _
+                    .Subjects.Item(i).SubjectUnit
+    Next</b>
+End With</pre>
+      </td>
+    </tr>
+</table>
+
+<p>As you can see, the above code is very similar to our previous <a href="#bkmrk1">example
+above</a>, except the code in <b>bold text</b>.&nbsp; If you remember, a native
+collection can enumerate its <i>items</i> through the use of <i><a href="#bkmrk3">For
+Each...Next</a></i> loop, but here we use the <i><a href="#bkmrk2">For...Next</a></i><a href="#bkmrk2">
+</a>loop in conjunction with <i>Count</i> property of our collection
+class.&nbsp; The reason is, we haven't implement it in our collection.&nbsp; To
+see what I mean, if you have added the Property Get <i><a href="#bkmrk4">TotalSubjectUnit</a></i>&nbsp;
+in our <i>Course</i> class, try to issue that command:</p>
+
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>' In the client form
+Debug.Print Course.TotalSubjectUnit        ' Error 438 Object doesn't support...</pre>
+      </td>
+    </tr>
+</table>
+
+<h3>Default Member of Collection Class</h3>
+<p>Native collection object have a default member, the <i>Item</i> method.&nbsp;
+How can we make our own <i>Item</i> method to be default member. You can
+implement the default member of your class following this procedure:</p>
+<ol>
+  <li>Press F2 to open the <b>Object Browser</b>, select the class module name (<i>Subjects</i>)
+    in the leftmost pane, the in the rightmost pane, right-click the item that
+    must become the default member (in our case: <i>Item </i>method), and then
+    select the <b>Properties</b> command from the pop-up menu that appears, then
+    the <b>Procedure Attributes</b> dialog box appears. Click on the <b>Advanced</b>
+    button to expand the <b>Procedure Attributes</b> dialog box. In the <b>Procedure
+    ID </b>combo box, select the (default) item. Click the <b>OK</b> button and
+    close the dialog box. In the Object Browser, you'll notice that a small,
+    round indicator has appeared next to the member's name. This verify that
+    that item you selected become the default member your class.
+    <p><img border="2" src="series3.gif" width="337" height="403">
+</ol>
+
+<h3>Support Enumeration</h3>
+<p>To support enumeration for our collection class, follow this procedure:</p>
+<ol>
+  <li>First add the following procedure to your class module:</li>
+</ol>
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>Function NewEnum() As IUnknown
+    Set NewEnum = m_Subjects.[_NewEnum]
+End Function</pre>
+      </td>
+    </tr>
+</table>
+
+<ol>
+  <li value="2">Then invoke the Procedure Attributes dialog box, just what you
+    did in making default member procedure. Then select the <i>NewEnum</i>
+    member, in Procedure ID combo box type <b>-4 (negative 4)</b>, then tick the
+    <b>Hide This Member</b> check box, and then click the OK button.</li>
+</ol>
+<p>Now our class supports default member and enumeration, our client form is
+more concise:</p>
+  <table cellPadding="5" width="691">
+    <tr>
+      <td bgcolor="#E2E2E2" width="675">
+
+<pre><a name="bkmrk1"></a>' In the client form
+' other code omitted...
+For Each Subject In .Subjects
+    Debug.Print Subject.SubjectCode &amp; &quot; : &quot; &amp; _
+                Subject.SubjectDescription &amp; &quot; : &quot; &amp; _
+                Subject.SubjectUnit
+Next
+Debug.Print Course.TotalSubjectUnit    ' No more error</pre>
+      </td>
+    </tr>
+</table>
+
+<h3>Additional Useful Collection Properties and Method</h3>
+<p>Referencing a collection item through index or string key can resulted to an
+error if you trying to access nonexistent item. Because we are now in control
+how our collection class behave, we can now create a method that check the existence
+of an item in the collection.&nbsp;&nbsp;&nbsp;</p>
+
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>Function IsExists(Index As Variant) As Boolean
+   On Error Resume Next
+   Dim tempSubject As Subject
+   Set tempSubject = m_Subjects.Item(Index)
+   IsExists = (Err &lt;&gt; 5) And (Err &lt;&gt; 9)
+End Function</pre>
+      </td>
+    </tr>
+</table>
+
+<p>As you can see, the only way to know if an item is in a Collection is by
+setting up an error handler and test the error number.&nbsp; Frequently,
+collection raises error 5 and 9 if an item doesn't exist.</p>
+
+<p>Another method that is handy to include to your collection class is a method
+that remove all the item in a collection, <b>RemoveAll</b>.&nbsp; Native
+collection doesn't offer a way to remove all the item in a collection.&nbsp; It
+time for us to add it:</p>
+
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>Sub RemoveAll()
+    Do While m_Subjects.Count
+        m_Subjects.Remove 1
+    Loop
+End Sub</pre>
+      </td>
+    </tr>
+</table>
+
+<p>Or you can use the faster one:</p>
+
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>Sub ClearAll()
+    Set m_Subjects = New Collection
+    ' or
+    'Set m_Subjects = Nothing
+End Sub
+</pre>
+      </td>
+    </tr>
+</table>
+
+<p><b>ClearAll</b> method simply destroy the Collection object by creating a new
+instance of Collection object.&nbsp; This method is not safe specially if other
+object variable is pointing to the collection object.</p>
+
+<p>Native Collections doesn't allow us to modify the value of an item.&nbsp; You
+can use <b>Replace</b> method to do job.</p>
+
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>Sub Replace(ByVal Index As Variant, ByVal newSubject As Subject, ByVal newKey As String)
+    Dim indexType As Integer
+    ' remove the item
+    m_Subjects.Remove Index     ' raise an error if item doesn't exists
+    ' determine the type pass to Index argument
+    indexType = VarType(Index)
+    If indexType &lt;&gt; vbString Then
+        ' index is used, put the replacement in the current position
+        Me.Add newSubject, newKey, Index
+    Else
+        ' string key is used, put the replacement at the end of the collection
+        Me.Add newSubject, newKey
+    End If
+End Sub</pre>
+      </td>
+    </tr>
+</table>
+
+<p>As you can see, in order to replace the item in the collection, we have to
+delete it first, then add the replacement item.&nbsp; The only trick here is it
+test the type of <i>Index</i> argument if it is a string or numeric index.&nbsp;
+If numeric index is used, the replacement item is place in the position index of
+item replaced.&nbsp; If a string key is used, the replacement item is place at
+the end of the collection.</p>
+
+<p>Because we dealing with object relationship or hierarchy, sometimes we want
+to navigate up in the hierarchy, to get to the parent object where our object is
+enclose.&nbsp; Navigating upward is usually done with Parent properties. The Parent property
+is an explicit object reference to its parent object.&nbsp;In our example, <i>Course</i>
+object maintain <i>Subject</i> object through its Collection object <i>Subjects</i>,
+so we can say that <i>Course</i> object is the parent of <i>Subject</i> object
+that we added in the Collection object <i>Subjects.&nbsp; </i>There are times
+that we might want to query these <i> Subject</i> in order to know its Parent properties,
+for example we want to know what&nbsp; is the <i>Course</i> is this Subject
+named <i>&quot;COM1: Introduction to Computer&quot;</i>.&nbsp; In order to that,
+we need explicit object reference to its parent object. The <i>Subject</i>
+object&nbsp; must check the <i>Parent</i> property of <i>Subjects</i> collection
+then use it to check its <i>Parent</i> object of <i>Subjects</i> collection. So
+we&nbsp; needs two pointer: one that points to the Collection and the other that
+the Collection is pointing to. By convention, this pointer is named <i>Collection</i>
+if the parent of an object is Collection object and if the parent is an object it
+is usually named <i>Parent</i>.&nbsp;
+</p>
+
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>' In Subject class module
+' Other properties omitted...
+Private m_Collection As Subjects	' point to the collection class object
+Private m_Parent As Course	      	' point to Course object
+
+Public Property Get Parent() As Course
+    Set Collection = m_Parent
+End Property
+
+Friend Property Set Parent(newParent As Course)
+    Set m_Parent = newParent
+End Property
+
+Public Property Get Collection() As Subjects
+    Set Collection = m_Collection
+End Property
+
+Friend Property Set Collection(newCollection As Subjects)
+    Set m_Collection = newCollection
+End Property</pre>
+      </td>
+    </tr>
+</table>
+
+<p>Once we set up our class, the parent Collection is responsible for setting up
+this pointer, in the <b> Add</b> method:
+</p>
+
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>' In Subjects collection class module
+' inside Add method
+newSubject.InitSubject newSubject.SubjectID, newSubject.SubjectCode, _
+                       newSubject.SubjectDescription, newSubject.SubjectUnit
+    
+' assign this collection class to be the Collection parent object
+<b>Set newSubject.Collection = Me</b></pre>
+      </td>
+    </tr>
+</table>
+
+<p>Now we have a pointer to its Parent Collection, we need to set up the <i>Parent</i>
+property of the Collection class in order our object (<i>Subject</i>) point to
+its main parent object (<i>Course</i>).&nbsp; But first, we must know the parent
+object of this Collection class object, we can do that by setting first it's own
+Parent Property.
+</p>
+
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>' In Subjects Collection Class
+' other code omitted
+Private m_Parent As Course
+
+Public Property Get Parent() As Course
+    Set Parent = m_Parent
+End Property
+
+Friend Property Set Parent(newParent As Course)
+    Set m_Parent = newParent
+End Property</pre>
+      </td>
+    </tr>
+</table>
+
+<p>Once we set up our <i>Subjects</i> Collection class <i>Parent</i> property, the
+<i>Course</i> object is responsible setting up
+this pointer, in the <b>Class Initialize </b>event:
+</p>
+
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>' In Course class module
+Private Sub Class_Initialize()
+    Set m_Subjects.Parent = Me   ' Set subject collection Parent property
+End Sub</pre>
+      </td>
+    </tr>
+</table>
+
+<p>After that, we can now set up the <i>Parent</i> property of <i>Subject</i>
+object in <i>Add</i> method:
+</p>
+
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>' In Subjects collection class module
+' inside Add method
+newSubject.InitSubject newSubject.SubjectID, newSubject.SubjectCode, _
+                       newSubject.SubjectDescription, newSubject.SubjectUnit
+    
+' assign this Collection class to be the Collection Parent object
+Set newSubject.Collection = Me
+' assign the Collection Parent property to be the Subject Parent property
+<b>Set newSubject.Parent = Parent</b>    </pre>
+      </td>
+    </tr>
+</table>
+
+<p>Now you can know in which <i>Course</i> a <i>Subject</i> is included:</p>
+
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>' In Subject class module
+<b>Public Property Get ParentName() As String
+</b>    ' Return the name of the Parent (CourseCode)<b>
+    ParentName = m_Parent.CourseCode
+End Property</b></pre>
+<pre>' In the client form
+' Other code omitted...
+
+' Show some information
+With Course
+    Debug.Print &quot;Course ID   : &quot; &amp; .CourseID
+    Debug.Print &quot;Course Code : &quot; &amp; .CourseCode
+    Debug.Print &quot;Description : &quot; &amp; .CourseDescription
+    Debug.Print &quot;====        ===========          ==== &quot;
+    Debug.Print &quot;Code        Description          Unit&quot;
+    Debug.Print &quot;====        ===========          ==== &quot;
+    ' Iterate to the collection of Subject object within Course object
+
+    For Each Subject In .Subjects
+        Debug.Print Subject.SubjectID &amp; &quot; : &quot; &amp; _
+                    Subject.SubjectCode &amp; &quot; : &quot; &amp; _
+                    Subject.SubjectDescription &amp; &quot; : &quot; &amp; _
+                    Subject.SubjectUnit &amp; &quot; : &quot; &amp; _
+<b>                    Subject.ParentName
+</b>    Next
+End With
+
+' Change the Course Code and Description
+With Course
+    .CourseCode = &quot;BSCE&quot;
+    .CourseDescription = &quot;Bachelor of Science in Computer Engineering&quot;
+End With
+' Show course changes
+With Course
+    Debug.Print &quot;Course ID   : &quot; &amp; .CourseID
+    Debug.Print &quot;Course Code : &quot; &amp; .CourseCode
+    Debug.Print &quot;Description : &quot; &amp; .CourseDescription
+    Debug.Print &quot;====        ===========          ==== &quot;
+    Debug.Print &quot;Code        Description          Unit&quot;
+    Debug.Print &quot;====        ===========          ==== &quot;
+    ' Iterate to the collection of Subject object within Course object
+
+    For Each Subject In .Subjects
+        Debug.Print Subject.SubjectID &amp; &quot; : &quot; &amp; _
+                    Subject.SubjectCode &amp; &quot; : &quot; &amp; _
+                    Subject.SubjectDescription &amp; &quot; : &quot; &amp; _
+                    Subject.SubjectUnit &amp; &quot; : &quot; &amp; _
+<b>                    Subject.ParentName
+</b>    Next
+End With
+</pre>
+      </td>
+    </tr>
+</table>
+
+<p>One last thing to point.&nbsp; Sometimes there may be an instance when you want a
+class property to be shared among all objects created from your class. For example, you might want all
+your objects created from your class to share a property value such as <i>SubjectID</i>,
+<i>CourseID</i> or <i>StudentID</i>, so they can be properly set during
+runtime.&nbsp; One solution is to use global variables, but we deliberately
+violate the encapsulation of our class.&nbsp; The simple solution for this
+problem is gather all the instances of the class that share the common value
+through our custom collection class.&nbsp; In our previous example, we can
+create a class static data that can be shared by all our object using <i>Read-Only
+</i>property:</p>
+
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>' In Subjects collection class module
+' other code omitted...
+<b>Private m_SubjectID As Long
+</b>
+<b>Public Property Get SubjectID() As Long
+   ' This property used to maintain SubjectID number
+    SubjectID = m_SubjectID
+End Property
+</b>
+' Inside Add method
+<b>Dim lngSubjectID As Long
+</b>' initial value of our m_Subject private member is zero
+<b>lngSubjectID = m_SubjectID + 1</b>
+' pass lngSubjectID to InitSubject method
+newSubject.InitSubject <b>lngSubjectID</b>, newSubject.SubjectCode, _
+                       newSubject.SubjectDescription, newSubject.SubjectUnit
+' other code omitted..
+' Increment our private member by 1
+<b>m_SubjectID = m_SubjectID + 1</b></pre>
+      </td>
+    </tr>
+</table>
+
+<p>In our client form, we can not omit the assignment of <i>SubjectID</i> as
+shown below:</p>
+
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>' In client form module
+' other code omitted...
+' Add the Subject object to the collection object of Course object
+Course.Subjects.Add New_Subject(, &quot;COMIT01&quot;, &quot;Introduction to Computer Science&quot;, 6), &quot;COMIT01&quot;
+Course.Subjects.Add New_Subject(, &quot;MTHGE01A&quot;, &quot;Modern College Algebra&quot;, 4), &quot;MTHGE01A&quot;
+Course.Subjects.Add New_Subject(, &quot;TYPGE01&quot;, &quot;Fundamental of Typewritting Part I&quot;, 3), &quot;TYPGE01&quot;
+Course.Subjects.Add New_Subject(, &quot;FILGE01&quot;, &quot;Sining ng Pakikipagtalastasan&quot;, 3), &quot;FILGE01&quot;
+Course.Subjects.Add New_Subject(, &quot;MTHGE03&quot;, &quot;Probability and Statistic&quot;, 3), &quot;MTHGE03&quot;
+Course.Subjects.Add New_Subject(, &quot;ARCCE01&quot;, &quot;Logic Design and Switching Theory&quot;, 3), &quot;ARCCE01&quot;
+
+' Delete some Subject object
+Course.Subjects.Remove &quot;TYPGE01&quot;  ' delete item 3
+Course.Subjects.Remove &quot;FILGE01&quot;  ' delete item 4
+
+' Add some more Subject object
+Course.Subjects.Add New_Subject(, &quot;ENGGE00&quot;, &quot;Reading Comprehension&quot;, 3), &quot;ENGGE00&quot;
+Course.Subjects.Add New_Subject(, &quot;ENGGE01&quot;, &quot;Comm. Arts I, Grammar and Composition&quot;, 3), &quot;ENGGE01&quot;
+' Show some information omitted...</pre>
+      </td>
+    </tr>
+</table>
+
+<p>If you look at the Immediate window, you'll see our collection class
+correctly set up our <i>SubjectID</i>, and remember the last <i>SubjectID</i>
+added to our collection.&nbsp; You can also do this in <i>Course</i> class but
+you should create your custom collection class <i>Courses</i> as we did in our
+example and set up the proper <i>CourseID</i>.</p>
+<h3>Reference:</h3>
+<p>Visual Basic Help Online: Microsoft Corporation</p>
+<h3>Still to Come</h3>
+<p>In the next article, we will build a simple application using what we have
+learned from the pass articles series.&nbsp; We will build a Class builder
+application.&nbsp; As you might know, Visual Basic has a special utility called
+Class Builder Add-In.&nbsp; This utility that lets you design the structure of a
+class hierarchy, create new classes and collection classes, and define their
+interfaces down to the attributes of each property, method, or event.&nbsp; In
+our application we will only do some part and also with some improvement.&nbsp;
+So be ready!</p>
+</blockquote>
+</body>
+
+</html>
+

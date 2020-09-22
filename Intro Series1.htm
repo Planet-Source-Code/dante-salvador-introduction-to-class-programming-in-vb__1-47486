@@ -1,0 +1,806 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Introduction to Class Programming in Visual Basic</title>
+
+</head>
+
+<body>
+
+<blockquote>
+
+<h2 align="center">Introduction to Class Programming in Visual Basic</h2>
+<p>In application program development, one of the most important considerations
+is the program's ability to accurately represent our perception of the real
+world. This requires the program to incorporate a realistic data model. Such a
+program is certainly easier to understand than one that performs its task
+without using a data model.</p>
+<p>In order to develop a data model, we begin with the contention that the real
+world consists of <i> entities</i> and <i>relationship</i>.</p>
+<p>An <b> entity</b> is defined as a live being, object or abstraction that can be
+described in terms of certain characteristic, and is similar to, but distinct
+from, entities of the same type.</p>
+<p>An <i> entity set</i> is a collection of entities of the same type. For example, the
+books in your personal library make up an entity set; this book that you are
+reading now is a member of the entity set. You are a student, and therefore, you
+are member of the entity students of your college.</p>
+<p>Each member of an entity set is different from the other member of the same
+set. The difference stem from their individual characteristic, called
+attributes. For example, a book is different from all other book because of its
+subject matter, author, publisher, design characteristic and unique ISBN book
+number. As a member of entity set of students, you are different from the rest
+of the student in your college because of your characteristic, such as your
+social security number, name, and so on.</p>
+<p>In addition to entity set, the real world teems with all kinds of
+relationship. A <b> relationship</b> is an association among member of one or more
+entity set. A relationship set is a set of similar but distinct relationships of
+the same type. For example, class enrollment can be regarded as a relationship
+set between the entities sets of students and courses. The fact that you own a
+book can be seen as a relationship between you, a member of the entity set of
+students, and your book, a member of the entity set of textbooks.</p>
+<p>One way you can represent entity set in Visual Basic is by using <b> Classes</b> and
+<b>Objects</b>. Fore example, the structure of Students below can be use to represent
+the student entity set or any its member in terms of their attributes, such as
+<code>Student_ID</code>, <code>FirstName</code>, <code>LastName</code>,&nbsp; <code>MajorCode</code>,
+<code> YearLevel</code>  and <code>BirthDate</code>.</p>
+<p>In Visual Basic, you can represents relationship set by providing the former
+entity object with an object property to the latter. For example a typical <code>
+Enrollment</code> entity might expose a <code> Student</code> entity. The relationship set enrollment
+can be modeled using this structure:<code>Student_ID, CourseNumber, AcademicYear,
+Semester and FinalLetterGrade</code></p>
+<h3>What is a Class</h3>
+<p>Many novice programmers when exposed for the first time in Object Oriented
+Programming tend to confuse classes and object. To aid the programmer about
+classes and object, this will give you some reminders. Your users will never see a
+class; rather, they will only see and act with objects created from your
+classes. As a programmer, your point of view is opposite because the thing you'll have in front of you while you're writing the application
+is the class, in the form of a class module.
+Until you run the application, an object isn't more real than a variable
+declared with a <i> Dim</i> statement in a code listing.</p>
+<p>A <b> class</b> is a part of the program that defines the properties, methods and
+events of one or more object that will be created during execution. An <b> object</b> is
+an <i> entity</i> created at run time, which requires memory and some resources and is then destroyed when it's no longer needed or when the application
+end. In short, a class are design time only entities, while object are run-time
+entities. Or in more or less technical term</p>
+<p>A class is a template or formal definitions that defines the <i> properties</i> of an
+object and the <i> methods</i> used to control that object's <b>behavior</b>. The description
+of these members is done only once, in the definition of the class. The object
+that belongs to a class, called instance of the class, share the code of the
+class to which they belong but contain only their particular setting for the
+properties of the class. <i> Everything an object <b> knows</b> is expressed in its
+<b>
+properties</b> and everything it <b> can do</b> is expressed in its <b>methods</b></i>. Object
+interacts with each other by sending message requesting that method be carried
+out, or that properties be set or returned. A message is simply the name of an
+object followed by the name of one of its members.</p>
+<h3>Why use Class?</h3>
+Classes can improve your productivity.&nbsp; Classes can organize your code into
+truly reusable modules and design your applications entirely using concepts
+derived from the Object-Oriented Design discipline. And the most important
+reason, objects are the base on which almost every feature of Visual Basic,
+without objects you can't do serious programming, you can't deliver Web based
+applications, and you can't write components for COM, DCOM, or MTS. To cut a long story short,
+you can do little or take advantage of them.&nbsp; If you are new to
+object-oriented programming, don't worry!&nbsp; The series of articles will help
+you to understand how objects can help you write better programs and plunge into
+object-oriented programming.&nbsp; But I assuming , you've already learned to
+master many advanced programming techniques concerned with, such as, events,
+database programming, and user interfaces.
+<h3>Fundamental Concepts About Class</h3>
+<p>Before diving into object-oriented programming let try to understand some
+concepts that will help you later in the articles.</p>
+<p><b>Encapsulation</b></p>
+<p><i>Encapsulation</i> is the process of combining logically related procedure and
+data in one class/objects. This way, each object is insulated (separated,
+protected) from the rest of
+the program. Because the object is only using data contained within it or passed
+to it. And it executes only internal procedures. It does not contain any global
+or public variables, and does not require any external procedures to execute its
+members. The data and behaviors of an encapsulated object can only be accessed
+and manipulated through its properties and public methods. Thus encapsulation
+provides several advantages for you as a programmer.&nbsp; You can protect data from corruption by other objects or parts of the
+program.&nbsp;You can hide low-level, complex implementation details from the
+rest of the program, which results in the ability to implement a simple public
+interface to a more complex set of private member. It is also easier to maintain
+legacy code or add new members to the object without affecting any procedures
+that currently call the object. You can to debug individual object and ensure
+that a bug in one object will not affect some other part of the system in an
+apparently unconnected way. And lastly, you can reuse the object or by other programmer,
+improving the productivity.</p>
+<p><b>Polymorphism</b></p>
+<p><i>Polymorphism</i> is the ability of different classes to expose similar (or
+identical) interfaces to the outside. The most unmistakable kind of polymorphism in
+Visual Basic is forms and controls. For example, <i>TextBox</i> and <i> PictureBox</i> controls are
+completely different objects, but they have some properties and methods in
+common, such as <i> Left</i> property and <i> Move</i> method. As a programmer, you don't need
+to worry about how they implement its functionality, instead, all you have to do is
+to apply it to a supported object and pass a correct value as arguments.</p>
+<p><b>Inheritance</b></p>
+<p><i>Inheritance</i> is the ability to derive a new class (the derived or
+inherited class) from another class (the base class). The derived class automatically
+inherits the properties and methods of the base class. For example, you could
+define a generic <b> Person</b> class with properties such as <code> FirstName</code> and
+<code> Lastname</code> and
+then use it as a base for more specific classes (for example, <b>Student</b>, <b>Faculty</b>,
+and so on) that inherit all those generic properties. You could then add
+specific members, such as <code> BirthDate</code> and <code> StudentID</code> for the
+<code> Student</code> class and <code>
+FacultyID</code> for the <code> Faculty</code> class. Thus it reduce the amount of code
+on your class itself, therefore simplifies
+the job of the class author. Unfortunately, Visual Basic doesn't support
+inheritance, at least not in its more mature form of implementation inheritance.&nbsp;</p>
+<h3>
+Building Your First Class</h3>
+<p>Creating a class in Visual Basic is very simple: just select the <b> Add Class
+Module </b> command from the <b> Project</b> menu. A new code editor window appears on an
+empty listing. Visual Basic automatically add a class module named <b>Class1</b>, so the very
+first thing you should do is change the Class name in the Project Properties
+window in a more appropriate name. The first
+version of our class includes only a few properties. These properties are
+exposed as <b> Public</b> members of the class module itself.</p>
+<ul>
+  <li><b>To create a class module&nbsp;</b></li>
+</ul>
+<blockquote>
+  <ol>
+    <li>Start <b> Visual Basic</b>.&nbsp;</li>
+    <li>In the <b> New Project
+dialog box</b>, select <b> Standard EXE</b>, then click <b>OK</b>.&nbsp;</li>
+    <li>On the <b> Project menu</b>, click <b>
+Add Class Module</b>.&nbsp;</li>
+    <li>In the <b> Add Class Module</b> dialog box, select <b> Class Module</b>,
+then click <b>Open</b>.&nbsp;</li>
+    <li>In the <b> Properties window</b>, set the <b> Name</b> property for the
+class module to <b>Student</b>.</li>
+  </ol>
+</blockquote>
+
+<ul>
+  <li><b>To create public property</b></li>
+</ul>
+<blockquote>
+  <ol>
+    <li>In the <b> Code window</b>, type the following:</li>
+  </ol>
+  <blockquote>
+  <table cellPadding="5" width="593">
+    <tr>
+      <td bgcolor="#E2E2E2" width="577">
+        <pre>'In the declaration section of the Student class module
+Public Student_ID As String
+Public FirstName As String
+Public LastName As String
+Public MajorCode As String
+Public YearLevel As String
+Public BirthDate As Date</pre>
+      </td>
+    </tr>
+</table>
+
+  </blockquote>
+
+</blockquote>
+<p>This is a very simple class, which consists of <b>Public</b> properties, so
+we are not distracted by OOP details (not yet), we will just examine the
+concept.&nbsp; Once you've created a
+class, you can create an instance of that class then you can use the properties
+of that class. The following example creates an instance of the <b> Student</b> class,
+and sets and retrieves its properties:&nbsp;</p>
+<ul>
+  <li><b>To Use the Student Class&nbsp;</b></li>
+</ul>
+<blockquote>
+  <ol>
+    <li>Place a
+command button on <b>Form1</b>.</li>
+    <li>In the<b> Click even</b>t for the command button, type the
+following:&nbsp;</li>
+
+  </ol>
+  <blockquote>
+  <table cellPadding="5" width="581">
+    <tr>
+      <td bgcolor="#E2E2E2" width="565">
+
+  <pre>  'Declare an object Student 
+  Dim objStudent As Student
+   
+  'Create an instance of the class 
+  Set objStudent = New Student 
+  
+  'Use the object Student 
+  objStudent.StudentID = &quot;12345&quot; 
+  objStudent.FirstName = &quot;Cathrina&quot; 
+  objStudent.LastName = &quot;Aniversario&quot; 
+  objStudent.MajorCode = &quot;C&quot; 
+  objStudent.YearLevel = &quot;Freshmen&quot; 
+  objStudent.BirthDate = &quot;Oct 10, 1980&quot; 
+  
+  MsgBox &quot;Student ID   : &quot; &amp; objStudent.StudentID &amp; vbCrLf &amp; _ 
+         &quot;Student Name : &quot; &amp; objStudent.FirstName &amp; &quot; &quot; &amp; _ 
+                             objStudent.LastName &amp; vbCrLf &amp; _ 
+         &quot;Major Code   : &quot; &amp; objStudent.MajorCode &amp; vbCrLf &amp; _ 
+         &quot;Year         : &quot; &amp; objStudent.YearLevel &amp; vbCrLf &amp; _ 
+         &quot;BirthDate    : &quot; &amp; objStudent.BirthDate 
+         
+  Set objStudent = Nothing </pre>
+      </td>
+    </tr>
+</table>
+
+  </blockquote>
+
+  <ol start="3">
+    <li value="3">On the <b> Run</b> menu
+in Visual Basic, click <b>Start</b>.&nbsp;</li>
+    <li>When the program is running, click the <b> Command1</b>
+button.&nbsp;</li>
+    <li>Click <b> OK</b> to close the message box.&nbsp;</li>
+    <li>On the <b> Run</b> menu in Visual
+Basic, click <b>Stop</b>.&nbsp;</li>
+  </ol>
+</blockquote>
+  <table cellPadding="5" width="659">
+    <tr>
+      <td bgcolor="#E2E2E2" width="643">
+
+  <h3><b>Object Keyword<br></h3>
+  </b><a name="256">The <i><b>New</b></i> keyword
+  </a>
+  <blockquote>
+  <p>The <i>New</i> keyword (when used in a <i>Set </i>command) tells Visual
+  Basic to create a brand-new instance of a given class. The keyword then
+  returns the address of the instance data area just allocated.</p>
+  </blockquote>
+  <a name="257">
+  <p>The <i><b>Set</b> </i>command</p>
+  </a>
+  <blockquote>
+  <p>The <i>Set</i> command simply copies what it finds to the right of the
+  equal sign into the object variable that appears to the left of it. This value
+  can be, for example, the result of a <i>New </i>keyword, the contents of
+  another variable that already exists, or the result of an expression that
+  evaluates to an object. The only other tasks that the <i>Set</i> command
+  performs are incrementing the reference counter of the corresponding instance
+  data area and decrementing the reference counter of the object originally
+  pointed to by the left-hand variable (if the variable didn't contain the
+  Nothing value):</p>
+  </blockquote>
+      </td>
+    </tr>
+</table>
+
+<p>Unlike regular variable, which can be used as soon as they have been
+declared, an object variable must be explicitly assigned an object reference before you
+can invoke the object's properties and methods. When an object variable has not been
+assigned, it contains the special <b> Nothing</b> value, meaning it doesn't contain any
+valid reference to an actual object. For example try this code:</p>
+  <table cellPadding="5" width="659">
+    <tr>
+      <td bgcolor="#E2E2E2" width="643">
+
+  <pre>' Declare the variable
+  Dim objStudent As Student
+
+' Then comment out the next line
+' Set objStudent = New Student 
+
+' Raises an error 91 
+' &quot;Object variable or With block variable not set&quot;
+   MsgBox objStudent.FirstName</pre>
+      </td>
+    </tr>
+</table>
+
+<p>The code will give you an error, because we trying to use an object that
+doesn't exist.&nbsp; This behavior is favorable because it doesn't make much sense to use a
+property of an object that doesn't exist. One way to avoid the error is to test
+its contents of an object variable using the<i> Is Nothing</i></p>
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>' Use the variable only if it contains a valid object reference
+If Not (objStudent Is Nothing) Then MsgBox objStudent.FirstName
+
+MsgBox objStudent.FirstName</pre>
+      </td>
+    </tr>
+</table>
+
+<p>But in other cases, you may want to create an object and then assign its
+properties. You might find it useful to declare an auto-instancing object
+variable using the <i> As New</i> clause:</p>
+  <table cellPadding="5" width="661">
+    <tr>
+      <td bgcolor="#E2E2E2" width="645">
+
+<pre>Dim objStudent As New Student ' Auto-instancing variable</pre>
+
+      </td>
+    </tr>
+</table>
+
+<p>At runtime, when Visual Basic encounters a reference to an auto-instancing
+variable, it first determines whether it's pointing to an existing object and
+creates a brand new instance of the class if necessary. But auto-instancing
+variables have an advantage and disadvantage:</p>
+<ul>
+  <li>It reduce the amount of code you need to write to be up and running with
+your classes. This can be useful if you are prototyping an application.&nbsp;</li>
+  <li>In
+some condition, you might declare a variable but never actually use it: which
+happens all the time with standard variables and with object variables too. In
+truth is, if you create an object with a Set command at the beginning of a
+procedure, you might be creating an object for no real purpose (thus taking both
+time and memory). On the other hand, if you delay the creation of an object
+until you actually need it, you could soon find yourself drowning in a sea of <i>
+Set</i> commands, each preceded by an <i> Is Nothing</i> test to avoid re-creating an object
+instanced previously. Auto-instancing variables are automatically created by
+Visual Basic only if and when they are referenced. This is probably the
+situation in which auto-instancing variables are most useful.</li>
+  <li>Your object variable cannot be tested against the <i> Nothing</i> value. In fact,
+as soon as you use one in the<i> Is Nothing</i> test, Visual Basic insistently creates
+a new instance and the test always returns <i> False</i></li>
+  <li>It eliminate errors, which is sometimes this is specifically what you don't
+need especially during the development stage, because during this state, you want to see
+    all the errors
+because this might be the symptoms of other serious deficiency in your code logic.</li>
+  <li>Auto-instancing variables make the debugging step a little more difficult
+to understand because you can never be sure when and why an object was created.</li>
+  <li>You can't declare an auto-instancing variable of a generic type, such as <i>Object</i>, or
+    <i> Form</i> because Visual Basic must know in advance which kind of object
+should be created when it references that variable for the first time.</li>
+  <li>Finally, each time Visual Basic references an auto-instancing variable, it
+incurs a small performance hit each time Visual Basic reference an
+auto-instancing, because Visual Basic has to check whether it's Nothing.</li>
+</ul>
+<p>In short, auto-instancing variables are not the best choice for creating the
+object and you should stay away from it.</p>
+  <table cellPadding="5" width="659">
+    <tr>
+      <td bgcolor="#E2E2E2" width="643">
+
+  <h3><b>Object Keyword<br></h3>
+  </b><a name="258">
+  <h3>The <i>Nothing</i> value</h3>
+  </a>
+  <blockquote>
+    <p>The <i>Nothing</i> keyword is the Visual Basic way of saying <i>Null</i>
+    or <i>0</i> to an object variable.&nbsp;</p>
+  </blockquote>
+  <a name="259">
+  <h3>The <i>Is</i> operator</h3>
+  </a>
+  <blockquote>
+    <p>The <i>Is</i> operator is used by Visual Basic to check whether two
+    object variables are pointing to the same instance data block. At a lower
+    level, Visual Basic does nothing but compare the actual addresses contained
+    in the two operands and return True if they match. The only possible variant
+    is when you use the <i>Is Nothing</i> test, in which case Visual Basic
+    compares the contents of a variable with the value 0. You need this special
+    operator because the standard equal symbol, which has a completely different
+    meaning, would fire the evaluation of the objects' default properties:</p>
+  </blockquote>
+      </td>
+    </tr>
+</table>
+
+<h3><b>Properties Of a Class</b></h3>
+<p> Now is the time to make our class to more
+robust class. A robust class is one that actively protects its internal data
+from tampering. So how can a class protect itself from invalid assignments, such
+as an empty string for its <i> FirstName</i> or <i> LastName</i> properties. To accomplish
+this purpose, you must change the internal implementation of the class module, because in
+its present form you have no means of trapping the assignment operation. Simply
+change all the <b> Public</b> member into <b> Private</b> members and encapsulate them in pairs
+of <b> Property procedures</b>.</p>
+  <ul>
+    <li><b>To change our Student class&nbsp;</b></li>
+  </ul>
+  <blockquote>
+    <ol>
+      <li>Double click the class <b> Student.cls</b> in the <b>
+Project Explorer&nbsp;</b></li>
+      <li>In the <b> Student Class Module</b>, change all word <b> Public</b> to
+        <b> Private</b> and add
+        a prefix <b> m_</b> in front of all private variables, as shown below:&nbsp;</li>
+    </ol>
+    <blockquote>
+    <table border="0" cellpadding="5" width="591">
+      <tr>
+        <td width="575" bgcolor="#E2E2E2">
+          <pre>'In the declaration section of the Student class module
+Private m_Student_ID As String
+Private m_FirstName As String
+Private m_LastName As String
+Private m_YearLevel As String
+Private m_BirthDate As Date        </pre>
+        </td>
+      </tr>
+    </table>
+    <p>
+    <div class="note" style="width: 556; height: 91">
+        <b>NOTE</b>
+        <hr>
+ You can also use <b> Replace Dialog</b> box. To do this, press <b>Ctrl-H</b>,
+      the <b>Replace
+Dialog</b> box appears. On the <b> Find What</b> combo box, type <i>Public</i>. Next on the
+      <b> Replace
+With</b> combo box, type <i>Private</i>, then click <b> Replace All</b> button.&nbsp;
+    </div>
+      <p> Appending the prefix <i>m_ </i>is just a personal style, this way it
+      keeps my property name and private member variable synchronize and it is
+      commonly used in programming. Feel free to use it or to create your own
+      style.</p>
+    </blockquote>
+    <ol>
+      <li value="3">In the <b> Student
+Class Module</b>, type the following code:&nbsp;</li>
+    </ol>
+    <blockquote>
+    <table border="0" cellpadding="5" width="588">
+      <tr>
+        <td bgcolor="#E2E2E2" width="582">
+<pre>'In the declaration section of the Student class module
+Private m_Student_ID As String
+Private m_FirstName As String
+Private m_LastName As String
+Private m_MajorCode As String
+Private m_YearLevel As String
+Private m_BirthDate As Date
+
+Property Get MajorCode() As String
+    MajorCode = m_MajorCode
+End Property
+
+Property Let MajorCode(ByVal strNewValue As String)
+    ' Raise an error if an invalid assignment is attempted.
+    If Len(strNewValue) = 0 Or Len(strNewValue) &gt; 1 Then Err.Raise 5
+    m_MajorCode = strNewValue
+End Property
+
+Property Get FirstName() As String
+   FirstName = m_FirstName
+End Property
+   
+Property Let FirstName(ByVal strNewValue As String)
+  ' Raise an error if an invalid assignment is attempted.
+  If Len(strNewValue) = 0 Then Err.Raise 5 ' Invalid procedure argument
+  ' Else store in the Private member variable.
+  m_FirstName = strNewValue
+End Property
+    
+Property Get LastName() As String
+   LastName = m_LastName
+End Property
+
+Property Let LastName(ByVal strNewValue As String)
+   ' Raise an error if an invalid assignment is attempted.
+   If Len(strNewValue) = 0 Then Err.Raise 5      ' Invalid procedure argument
+   ' Else store in the Private member variable.
+   m_LastName = strNewValue
+End Property
+
+Property Get StudentID() As String
+   StudentID = m_Student_ID
+End Property
+
+Property Let StudentID(ByVal strNewValue As String)
+   ' Raise an error if an invalid assignment is attempted.
+   If Len(strNewValue) = 0 Then Err.Raise 5     ' Invalid procedure argument
+   ' Else store in the Private member variable.
+   m_Student_ID = strNewValue
+End Property
+
+Property Get BirthDate() As Date
+   BirthDate = m_BirthDate
+End Property
+
+Property Let BirthDate(ByVal datNewValue As Date)
+   If datNewValue &gt;= Now Then Err.Raise 1001, , &quot;Future Date!&quot;
+     m_BirthDate = datNewValue
+End Property
+
+Property Get YearLevel() As String
+   YearLevel = m_YearLevel
+End Property
+
+Property Let YearLevel(ByVal strNewValue As String)
+  Dim varTemp As Variant
+  Dim found As Boolean
+  
+  For Each varTemp In Array(&quot;Freshmen&quot;, &quot;Sophomore&quot;, &quot;Junior&quot;, &quot;Senior&quot;)
+    If InStr(1, strNewValue, varTemp, vbTextCompare) Then
+      found = True
+      Exit For
+    End If
+  Next
+
+  If Not found Then Err.Raise 5
+  m_YearLevel = strNewValue
+End Property</pre>
+        </td>
+      </tr>
+    </table>
+    </blockquote>
+    <div class="note">
+      <blockquote>
+        <b>NOTE</b>
+        <hr>
+        Visual Basic can help you in typing Property Procedure by <b>Add
+        Procedure </b>command from the <b>Tools</b> menu, which creates a
+        templates for <i>Property Get</i> and <i>Let </i>procedures. But you
+        should edit the result to a proper data type, because all properties
+        created by this command is of type <b>Variant</b>.
+      </blockquote>
+    </div>
+    <ol start="4">
+      <li>On the <b> Run</b> menu
+in Visual Basic, click <b>Start</b>.&nbsp;</li>
+      <li>When the program is running, click the <b> Command1</b>
+button.&nbsp;</li>
+      <li>Click <b> OK</b> to close the message box.&nbsp;</li>
+      <li>On the <b> Run</b> menu in Visual
+Basic, click <b>Stop</b>.&nbsp;</li>
+    </ol>
+  </blockquote>
+
+<p>Everything works as before. What we have done, is make the class a bit more
+robust because it now refuses to assign invalid values to its properties. To see
+what I mean, just try to issue this command:</p>
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+
+<pre>objStudent.FirstName = &quot;&quot;	'Raises an error 'Invalid Procedure call</pre>
+      </td>
+    </tr>
+</table>
+
+<p><b>Property Get/Propert Let</b> </p>
+
+<p>Every time you assign a new value to a property, Visual Basic checks whether
+there's an associated <i>Property Let</i> procedure and passes the new value
+to its associated <b>Private</b> variable. If the code can't validate this new
+value, it raises an error and throws the execution back to the caller.
+Otherwise, the execution proceeds by assigning the value to the <b>Private</b>
+variable.&nbsp; And when the caller code requests the value of the property,
+Visual Basic executes the corresponding <i>Property Get</i> procedure, which
+simply returns the value of the <b>Private</b> variable. Try to trace your code
+by pressing F8,&nbsp; and see what actually those property procedure do.&nbsp; </p>
+<div class="note" style="width: 676; height: 76">
+  <blockquote>
+    <b>NOTE</b>
+    <hr>
+    The type expected by the <i>Property Let</i> procedure must match the type
+    of the value returned by the <i>Property Get</i> procedure.
+  </blockquote>
+</div>
+<p>You might be asking this question, &quot;Why not just use a public variable
+to store property values?&nbsp; In a sense, we are just using a sort of
+indirection. Why not use function to return a value or sub to assign a value&quot; In some cases that may work fine; however, if you want to
+make sure that the value assigned to the property is valid, you have to write
+validation code when the value is assigned. And usually you this by creating a <b>Sub</b>
+or <b>Function</b> to validate the public variable or worst you end up coding a
+lot in the client (form) for this validation routine.&nbsp; It end up, we did
+not benefit for the characteristic of OOP which is encapsulation, stated that
+&quot;an object is the sole owner of its own data.&quot; And this is the benefit of using a
+property procedure.</p>
+<p><b>Read-Only Property</b></p>
+
+<p>If you look at Visual Basic how it handle its own object, such as form and
+controls, some properties can be both read and be written to.&nbsp; For example,
+you cannot modify the <i>Height</i> property of a <b>ComboBox</b> even at design time and
+you cannot modify the <i>MultiSelect</i> property of the <b>ListBox</b> at run
+time. You can also use this technique to limit the access to your class properties,
+thus making them read-only.</p>
+
+<p>You can make a property to be read-only property by simply omitting its <i>
+Property Let</i> procedure.&nbsp; For example, we might add a <i> FullName</i> property to
+our <b> Student</b> class.</p>
+
+    <table border="0" cellpadding="5" width="674">
+      <tr>
+        <td width="658" bgcolor="#E2E2E2">
+          <pre>Public Property Get FullName() As String
+  ' Raise an error if an FirstName or LastName is empty
+   If (Len(m_FirstName) = 0) Or (Len(m_LastName) = 0) Then Err.Raise 5
+  ' Else return the Student Fullname
+   FullName = m_FirstName &amp; &quot; &quot; &amp; m_LastName
+End Property</pre>
+        </td>
+      </tr>
+    </table>
+<p>Now test your read-only property.&nbsp; Try to issue a command like as shown
+below:</p>
+
+    <table border="0" cellpadding="5" width="670">
+      <tr>
+        <td width="654" bgcolor="#E2E2E2">
+          <pre>'this raise an error Compile Error:  Cannot assign to read-only property
+objStudent.FullName = &quot;Samantha Aniversario&quot;</pre>
+        </td>
+      </tr>
+    </table>
+<p>Visual Basic raises a Compile Error &quot;<b>Cannot assign to read-only
+property</b>&quot;, because you are trying to assign a value to a read only
+property.&nbsp; Your program won't even compile or run until you delete this
+line of error.&nbsp; In addition, if we omit either the <i>FirstName</i> and <i>LastName</i>
+assignment statement (to be precise, omit the call of either <i>FirstName</i> or
+<i>LastName</i> <b>Propert Get</b>), <b>Student</b> class will raise an error
+when we try to execute the read-only property <i>FullName</i>.&nbsp; The trick
+is every time we use <i>FullName</i> property, the code will check the value
+stored in our Private member&nbsp; <i>m_FirstName</i> and <i>m_LastName</i>.&nbsp;
+If either of the two property does not contain any value, there is no reason to
+return the value of <i>FullName</i>. In fact, have you ever met a person with
+only have a FirstName or LastName?</p>
+
+<p><b>Write-only property</b></p>
+
+<p>This kind of property is nearly the most perplex property that Visual Basic
+has to offer.&nbsp; Because you cannot find anything useful for this
+property.&nbsp; And usually, programmer find it&nbsp; as unnatural of using this
+kind of property.&nbsp; For completeness, write-only property can be implemented
+by omitting the corresponding <i>Property Get</i>.&nbsp; A classical example is
+a <i>Password</i> property in a secured application usually with Login
+features.&nbsp; You can assign and validate the login process of the user, but
+your user cannot read it, because it compromise the security of the your
+application.</p>
+<table cellPadding="5" width="95%">
+  <tbody>
+    <tr>
+      <td bgcolor="#E2E2E2">
+        <pre>Private m_Password As String
+
+Property Let Password(ByVal strNewValue As String)
+    ' Raise error if password in invalid
+    ' .. code omitted..
+    ' Else assign to member variable.
+    m_Password = strNewValue 
+End Property</pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>Frequently, programmer prefer to create a method that accept the value as an
+argument, if the circumstances occurs like for our example.&nbsp; </p>
+<h3>Method of a Class</h3>
+<p>In addition to class member (<i>property</i>) data. Your custom class can
+also include <b>Sub</b> and <b>Function</b> procedures, which are commonly&nbsp;
+known as <i>methods</i> of the class.&nbsp; A method of a class represent some
+standard operations on the class itself (properties).&nbsp; As you know, the
+difference between Sub and Function, is that Sub does not return any value,
+whereas Function method returns a value.&nbsp; But Visual Basic lets you invoke a function and discard its return
+value.&nbsp; In our example class, you could easily add a routine that calculate
+the Student <i>Age</i>.&nbsp; </p>
+
+<table cellPadding="5" width="95%">
+    <tr>
+      <td bgcolor="#E2E2E2">
+        <pre>Function Age() As Integer
+' Returns the age in years between 2 dates.
+' Doesn't handle negative date ranges i.e. BirthDate &gt; Now()
+    If Month(Now()) &lt; Month(BirthDate) Or _
+      (Month(Now()) = Month(BirthDate) And _
+      Day(Now()) &lt; Day(BirthDate)) Then
+        Age = Year(Now()) - Year(BirthDate) - 1
+    Else
+        Age = Year(Now()) - Year(BirthDate)
+    End If
+End Function</pre>
+      </td>
+    </tr>
+</table>
+<p>As you can see in our example, if you are within the class module, you don't
+need the dot syntax to refer to the properties of the current instance. In
+addition, if you refer to a Public name for a
+property (<i>BirthDate</i>) instead of the corresponding Private member variable
+(<i>m_BirthDate</i>), Visual Basic executes the <i>Property Get</i> procedure as
+if the property were referenced from outside the class. </p>
+
+<table cellPadding="5" width="95%">
+    <tr>
+      <td bgcolor="#E2E2E2">
+        <pre>'In your client form
+MsgBox &quot;Student Age : &quot; &amp; objStudent.Age</pre>
+      </td>
+    </tr>
+</table>
+
+<p>Now let create another function, that checks the validity of <i>YearLevel</i>.&nbsp; We will make this function to be
+<b> Private</b> meaning that this
+procedure can only be called from within the module. </p>
+
+<table cellPadding="5" width="95%">
+    <tr>
+      <td bgcolor="#E2E2E2">
+        <pre>'In your Student class module
+' Private method of a class, cannot be used outside
+Private Function IsValidYearLevel(level As String) As Boolean
+  Dim varTemp As Variant
+  Dim found As Boolean
+  
+  For Each varTemp In Array(&quot;Freshmen&quot;, &quot;Sophomore&quot;, &quot;Junior&quot;, &quot;Senior&quot;)
+    If InStr(1, level, varTemp, vbTextCompare) Then
+        found = True
+        Exit For
+    End If
+  Next
+  
+  IsValidYearLevel = found
+End Function
+        
+'In Property Let YearLevel
+Property Let YearLevel(ByVal strNewValue As String)
+   If Not IsValidYearLevel(strNewValue) Then Err.Raise 5
+   m_YearLevel = strNewValue
+End Property</pre>
+      </td>
+    </tr>
+</table>
+<p> In other words,
+you cannot call this method in your client application.&nbsp; In fact, you
+cannot see a <b>Private</b> function in <i>IntelSense</i> technology of Visual
+Basic&nbsp;</p>
+<p><b>Choosing Between Methods or Properties</b></p>
+<p>As you may pointed our earlier.&nbsp; Properties is like a function.&nbsp; So
+how can we know when we must implement property or a function.&nbsp; To tell you
+honestly, their is no universal rule concerning this scenario, but usually
+programmer implement a properties when a routine serves mostly to return a value
+stored inside the class and can be quickly and easily reevaluated.&nbsp;
+When the routine servers mostly to evaluate a complex value, they use <b><i>function</i></b>.
+If programmer thinks that in the future the value returned by the routine could
+be assigned to, they use <b>Property Get</b> procedure and gives them a chance
+to add a <b> Property Let</b> when its time to implement one.</p>
+<p>Let's make an example. Earlier we implement a <b> Property Get</b> procedure for our
+class member <i>FullName</i>.&nbsp; How can we make our class more useable in a long
+run by providing a <b> Property Let</b>.&nbsp; This way we can have two way of assign a
+value to <i> FirstName</i> and <i> LastName</i> property.&nbsp; A possible solution might look
+like this:</p>
+<table cellPadding="5" width="95%">
+  <tbody>
+    <tr>
+      <td bgcolor="#E2E2E2">
+        <pre>Property Let FullName(ByVal strNewValue As String)
+' Return the full name of Student object
+    Dim aStrName() As String
+    ' Split the argument pass (strNewValue)
+    aStrName() = Split(strNewValue)
+    ' Raise an error if an FirstName or LastName is empty
+    If UBound(aStrName) = 0 Then Err.Raise 5
+    FirstName = aStrName(0)
+    LastName = aStrName(1)
+End Property</pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>You can directly assign a value to <i> FirstName</i> and <i> LastName</i> property as shown
+below:
+<p>&nbsp;
+<table cellPadding="5" width="95%">
+  <tbody>
+    <tr>
+      <td bgcolor="#E2E2E2">
+        <pre>objStudent.FullName = &quot;Cathrina Anniversario&quot;
+'try getting the Student property FirstName and LastName
+MsgBox objStudent.FirstName  'Invoke Property Get FirstName
+MsgBox objStudent.LastName   'Invoke Property Get LastName</pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>As you can see, even if we didn't assign a value to the Student <i>FirstName</i>
+and <i>LastName</i> property explicitly, our new <i>FullName</i> property does
+the job.&nbsp; This is other nice thing you can do with class property</p>
+<h3>Reference:</h3>
+<p>Visual Basic Help Online: Microsoft Corporation </p>
+<h3>Still to Come</h3>
+<p>In the next article, I'm going to discuss about some semi-advance topic such
+as Enumeration, Properties with Argument, Properties that return an Object,
+Advance Method and Other Class Attributes.</p>
+</blockquote>
+</body>
+</HTML>

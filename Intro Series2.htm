@@ -1,0 +1,1071 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Introduction to Class Programming in Visual Basic Series 2</title>
+
+</head>
+
+<body onload="vbscript:KJ_start()">
+
+<blockquote>
+
+<h2 align="center">Introduction to Class Programming in Visual Basic</h2>
+<p>In our previous discussion, we tackle about the basic concepts of class,
+including creating it's state (<i>property</i>) and behavior (<i>methods</i>).&nbsp;
+We also discuss about simple validation of its class property by including
+validation code in its <i>Property Let</i>. Thus making your class more
+robust.&nbsp; We also discuss about some property variation, such as<i>
+read-only </i>property as well as <i>write-only</i> property. We also discuss
+decision making of using function (method) and property procedure in your class.</p>
+<p>In this series articles,&nbsp; we are going to discuss about: Enumeration, Properties that return an Object <b> </b>and
+other semi-advance topic pertain to in creating&nbsp; a class base program.</p>
+<h3>Enumerated Properties</h3>
+<p>An enumeration allows you to define your own set of named constants. A named
+constant is an item that preserve a constant value throughout the execution of a
+program and can be used in place of literal values. In other words,&nbsp; an <i>Enum
+</i> is nothing but a group of related constant values that
+automatically take different values.&nbsp; You can use named constants as
+property values, method arguments, and as a function's return values. By using a named
+constant it makes your code easier to read and maintain. For example, some
+properties are intended to return a well-defined subset of integer numbers. In
+our <b>Student</b> class, we can implement a <i>YearLevel </i>property that can
+be assigned the values 1 (Freshmen), 2 (Sophomore), 3 (Junior), and 4
+(Senior).&nbsp;</p>
+  <table cellPadding="5" width="668">
+    <tr>
+      <td bgcolor="#E2E2E2" width="652">
+        <pre>' In the declaration section of the class
+Enum YearLevelEnum
+    Freshmen = 1
+    Sophomore
+    Junior
+    Senior
+End Enum</pre>
+      </td>
+    </tr>
+</table>
+
+<p>You don't need to assign an explicit value to all the items in the <i>Enum</i>
+structure, Visual Basic&nbsp; increments the preceding value automatically by 1. But because 0 is the
+default value for any <b>Integer</b> property when the class is created, Visual Basic
+starts at 0. It is a good programming style that you should always stay clear in
+assigning value to the <i> enum list</i>, so that you can later trap any value that
+hasn't been properly initialized .&nbsp; But <i>Enum</i> values don't need to be
+in an increasing sequence. In fact, you can provide special values for <i>Enum</i>
+constant list, as shown below:</p>
+  <table cellPadding="5" width="667">
+    <tr>
+      <td bgcolor="#E2E2E2" width="651">
+        <pre>' In the declaration section of the class
+Enum GradeEnum
+    Falling = 50
+    Passing = 75
+    Probationary = 84
+    Except = 90
+End Enum</pre>
+      </td>
+    </tr>
+</table>
+
+<p>After you define an <i>Enum</i> structure, you can create a <b> Public</b> or
+<b> Private</b>
+property
+of the corresponding type:</p>
+  <table cellPadding="5" width="664">
+    <tr>
+      <td bgcolor="#E2E2E2" width="648">
+        <pre>Private m_YearLevel As YearLevelEnum
+
+Property Get YearLevel() As YearLevelEnum
+    YearLevel= m_YearLevel
+End Property</pre>
+        <pre>Property Let YearLevel(ByVal enumValue As YearLevelEnum)
+    ' Refuse invalid assignments. 
+    If enumValue &lt;= 0 Or enumValue &gt; Senior Then Err.Raise 5
+    m_YearLevel= enumValue 
+End Property</pre>
+      </td>
+    </tr>
+</table>
+
+<p>You should never forget that <i>Enum</i>s are just shortcuts
+for creating constants. This means that all the enumerated constants defined
+within an <i>Enum </i>block should have unique names in their scope. Typically <i> Enums</i>&nbsp;
+type are made by programmer to be <b>Public</b>, so their scope is often the
+entire application.</p>
+<p>It is a good programming practice, that you should devise a method for
+generating unique names for all your enumerated constants. If you fail to do
+that, the compiler refuses to compile your application and raises the <b><i>
+&quot;Ambiguous name detected: &lt;itemname&gt;&quot;</i></b> error. The easy way to
+avoid this problem is to add to all the enumerated constants a unique 2 or 3
+letter prefix, for example:</p>
+  <table cellPadding="5" width="662">
+    <tr>
+      <td bgcolor="#E2E2E2" width="646">
+        <pre>' In the declaration section of the class
+Enum YearLevelEnum
+    lvlFreshmen = 1
+    lvlSophomore
+    lvlJunior
+    lvlSenior
+End Enum</pre>
+      </td>
+    </tr>
+</table>
+
+<p>Another way to avoid ambiguous name problem is use the complete <i>enumname.constantname
+</i>syntax whenever you refer to an ambiguous <i>Enum</i> member, as in the
+following code:</p>
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+        <pre>Student.YearLevel = YearLevelEnum.lvlSenior</pre>
+      </td>
+    </tr>
+</table>
+
+<p>While enumerated properties are very useful and allow you to store some
+descriptive information in just 4 bytes of memory, sooner or later you will have to extract and
+decode this information and
+sometimes even show it to your users. For this reason, It is a good programming
+practice to add a <i> read-only</i> property that returns the
+description of an enumerated property:</p>
+  <table cellPadding="5" width="661">
+    <tr>
+      <td bgcolor="#E2E2E2" width="645">
+        <pre>Property Get YearLevelDescription() As String
+    Select Case m_YearLevel 
+        Case lvlFreshmen : YearLevelDescription = &quot;Freshmen&quot;
+        Case lvlSophomore: YearLevelDescription = &quot;Sophomore&quot;
+        Case lvlJunior:    YearLevelDescription = &quot;Junior&quot;
+        Case lvlSenior:    YearLevelDescription = &quot;Senior&quot;
+<b>       </b> Case Else:         Err.Raise 5   <b>        </b>
+    End Select
+End Property</pre>
+      </td>
+    </tr>
+</table>
+
+<p>Another issue that you should never forget that your class are often change its structure if
+you are still in developing stage. So it is possible that your validation code
+can become outdated.&nbsp; For example, what happens if you later add a fifth <i>YearLevel</i>
+constant such <i> Graduate</i> or <i>Masteral</i>?&nbsp; For this reason, you should always add
+new constants safely without modifying the validation code in the
+corresponding <i>Property Let</i> procedure,&nbsp; one way to do this is create a <i> enum</i> constant as the highest value in that block and assign
+the value that you wanted to be the last <i> enum</i> constant, as shown below:</p>
+  <table cellPadding="5" width="662">
+    <tr>
+      <td bgcolor="#E2E2E2" width="646">
+        <pre>' In the declaration section of the class
+Enum YearLevelEnum
+    lvlFreshmen = 1
+    lvlSophomore
+    lvlJunior
+    lvlSenior
+    <b>lvlGraduate				' newly added <i>enum</i> constant
+    lvlMasteral				' newly added <i>enum</i> constant
+    YEAR_LEVEL_MAX = lvlMasteral	' make lvlMasteral the last <i>enum</i> constant</b>
+End Enum</pre>
+        <pre>Property Let YearLevel(ByVal enumValue As YearLevelEnum)
+    ' Refuse invalid assignments
+    If enumValue &lt;= 0 Or enumValue &gt; <b>YEAR_LEVEL_MAX</b> Then Err.Raise 5
+    m_YearLevel= enumValue 
+End Property</pre>
+      </td>
+    </tr>
+</table>
+
+<p>As you can see we can safely add a new <i>enum</i> constant without worrying
+about the validation code in our <i>Property Let</i> to become obsolete. And
+making our maximum value in <i>uppercase</i> and putting a <i>comment</i>, we
+can easily spot it in our source code. Of course, you should account your
+read-only&nbsp; property description, because adding new <i>enum</i> constant in
+our <i>enum</i><i> </i>block without adding appropriate description our <i>YearLevelDescription</i>
+property will result to an error, but at least we are safely notified.</p>
+
+  <table cellPadding="5" width="661">
+    <tr>
+      <td bgcolor="#E2E2E2" width="645">
+        <pre>' Modified version
+Property Get YearLevelDescription() As String
+    Select Case m_YearLevel
+        Case lvlFreshmen:   YearLevelDescription = &quot;Freshmen&quot;
+        Case lvlSophomore:  YearLevelDescription = &quot;Sophomore&quot;
+        Case lvlJunior:     YearLevelDescription = &quot;Junior&quot;
+        Case lvlSenior:     YearLevelDescription = &quot;Senior&quot;
+        Case lvlGraduate:   YearLevelDescription = &quot;Graduate&quot;
+        Case lvlMasteral:   YearLevelDescription = &quot;Masteral&quot;
+        Case Else:          Err.Raise 5
+    End Select
+End Property
+</pre>
+      </td>
+    </tr>
+</table>
+
+<p>The addition of highest value for your <i>enum</i> list might confuse your
+user.&nbsp; You might want to hide this or decided not to show it from your user
+when they started to use your class.&nbsp; I common technique that you can use
+is by placing an underscore at the start of the <i>enum</i> list identifier as
+shown below:
+</p>
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+        <pre>Enum GenderEnum
+   Male = 1
+   Female
+   [_GENDER MAX] = Female
+End Enum</pre>
+      </td>
+    </tr>
+</table>
+
+<p>The square brackets <b> [] </b> are necessary because, Visual Basic will complain by raising
+a compile error:<b> Invalid character</b>.&nbsp; Adding square brackets permit
+us to add an <i>underscore </i>( <font face="Courier New"><b>_</b></font> )at
+the beginning of the <i>enum</i> list identifier and brought
+us another useful technique, you can now add space to your <i>enum</i> list
+identifier as shown above.&nbsp; Unfortunately, even you, the author of the
+class cannot see this!&nbsp; So you must remember this <i>enum</i> list
+identifier when you use your class, especially in the <i>Property procedures</i>
+validation code.
+</p>
+
+<p>One last thing that I can add pertaining to <i> enumerated</i> type.&nbsp; Sometimes, you need this description to populate a control in you
+client form, such as <b> ComboBox</b> and <b> ListBox</b> control. One technique that
+I used
+frequently, I usually change the implementation of description property by
+adding an <i>optional</i> <b>ByVal</b> parameter and then use the textual description
+to populate the control:</p>
+
+  <table cellPadding="5" width="661">
+    <tr>
+      <td bgcolor="#E2E2E2" width="645">
+        <pre>' In the Student class module
+<b>Public Sub LoadYearLevelDescriptionTo(ctrl As Control)
+    Dim i As Integer
+    ctrl.Clear
+    For i = Freshmen To [_YEAR LEVEL MAX]
+        ctrl.AddItem YearLevelDescription(i)
+    Next i
+End Sub</b>
+
+Property Get YearLevelDescription(<b>Optional ByVal level As YearLevelEnum</b>) As String
+    <b>Dim tempLevel As Long</b>
+    ' If argument level contain a value, use it in the Select Case,
+    ' otherwise, use the Private m_YearLevel variable
+    <b>tempLevel = IIf(level = 0, m_YearLevel, level)</b>
+    Select Case <b>tempLevel</b>
+        Case Freshmen:   YearLevelDescription = &quot;Freshmen&quot;
+        Case Sophomore:  YearLevelDescription = &quot;Sophomore&quot;
+        Case Junior:     YearLevelDescription = &quot;Junior&quot;
+        Case Senior:     YearLevelDescription = &quot;Senior&quot;
+        Case Graduate:   YearLevelDescription = &quot;Graduate&quot;
+        Case Masteral:   YearLevelDescription = &quot;Masteral&quot;
+        Case Else:          Err.Raise 5
+    End Select
+End Property
+
+
+' In your client form
+' Load Year level description in ListBox Control
+Student.LoadYearLevelDescriptionTo List1
+or
+' Load Year level description in ListBox Control
+Student.LoadYearLevelDescriptionTo Combo1</pre>
+      </td>
+    </tr>
+</table>
+
+<p>See, how easy it would be in the client, I don't have to populate the <i>List</i>
+property of the <b>Combo</b> or <b>ListBox</b> control in the client form, all I
+have to do is to call <b>LoadYearLevelDescriptionTo</b> to do the work.&nbsp;
+Note, you can still use the <i> Property YearLevelDescription</i> without an argument:</p>
+
+  <table cellPadding="5" width="660">
+    <tr>
+      <td bgcolor="#E2E2E2" width="644">
+        <pre>' Return the Year Level Description of this particular Student
+Debug.Print Student.YearLevelDescription     </pre>
+      </td>
+    </tr>
+</table>
+
+<h3>Object Properties</h3>
+<p>In addition to (<i>enumerated</i>) class properties, our class objects might expose
+properties that return object values. To give you an example, Visual Basic
+object such as forms and visible controls expose a <i>Font</i> property, which
+returns a Font object.&nbsp;</p>
+  <table cellPadding="5" width="662">
+    <tr>
+      <td bgcolor="#E2E2E2" width="646">
+        <pre>txtFirstName.Font.Name = &quot;Tahoma&quot;
+txtFirstName.Size = 10
+txtFirstName.Bold = True
+</pre>
+        <pre>frmStudent.Font.Bold = True</pre>
+      </td>
+    </tr>
+</table>
+
+<p>We can also do this in our classes. Taking our <b>Student</b> class,&nbsp; we might
+add a <i>Address</i> property, but string is not enough&nbsp; to point accurately
+where the student lives, and we usually need several pieces of related
+information, such <i>street</i>, <i>city</i>, <i>state</i> or <i>province</i>, <i>zip
+code</i>, as well as <i>country</i>.&nbsp; Instead of adding multiple properties
+to the Student object, create a new <b> Address</b> class:</p>
+<ul>
+  <li><b>To create an Address class</b></li>
+</ul>
+<blockquote>
+  <ol>
+    <li>On the <b>Project menu</b>, click <b>Add Class Module</b>.&nbsp;
+    <li>In the <b>Add Class Module</b> dialog box, select <b>Class Module</b>,
+      then click <b>Open</b>.&nbsp;
+    <li>In the <b>Properties window</b>, set the <b>Name</b> property for the
+      class module to <b>Address</b>.</li>
+    <li>In the <b>Code window</b>, type the following:</li>
+  </ol>
+  <blockquote>
+    <table cellPadding="5" width="590">
+      <tbody>
+        <tr>
+          <td bgColor="#e2e2e2" width="672">
+            <pre>Option Explicit
+
+' In Address class module declaration
+Private m_Street As String
+Private m_City As String
+Private m_State As String
+Private m_Zip As String
+Private m_Country As String
+
+Public Property Let Street(ByVal strNewStreet As String)
+    If Len(strNewStreet) = 0 Then Err.Raise 5
+    m_Street = strNewStreet
+End Property
+
+Public Property Get Street() As String
+    Street = m_Street
+End Property
+
+Public Property Let City(ByVal strNewCity As String)
+    If Len(strNewCity) = 0 Then Err.Raise 5
+    m_City = strNewCity
+End Property
+
+Public Property Get City() As String
+    City = m_City
+End Property
+
+Public Property Let State(ByVal strNewState As String)
+    If Len(strNewState) = 0 Then Err.Raise 5
+    m_State = strNewState
+End Property
+
+Public Property Get State() As String
+    State = m_State
+End Property
+
+Public Property Let Zip(ByVal strNewZip As String)
+    If Len(strNewZip) = 0 Then Err.Raise 5
+    m_Zip = strNewZip
+End Property
+
+Public Property Get Zip() As String
+    Zip = m_Zip
+End Property
+
+Public Property Let Country(ByVal strNewCountry As String)
+    If Len(strNewCountry) = 0 Then Err.Raise 5
+    m_Country = strNewCountry
+End Property
+
+Public Property Get Country() As String
+    Country = m_Country
+End Property
+
+Public Function CompleteAddress() As String
+    CompleteAddress = Street &amp; vbCrLf &amp; _
+                      City &amp; &quot;, &quot; &amp; State &amp; &quot; &quot; &amp; Country &amp; &quot; &quot; &amp; Zip
+End Function
+</pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </blockquote>
+</blockquote>
+<p>Now you can add our new <i>Address</i> property to our <b>Student</b> class
+in declaration section of the <i>Student</i> class module:</p>
+
+  <table cellPadding="5" width="669">
+    <tr>
+      <td bgcolor="#E2E2E2" width="653">
+        <pre>'In the declaration section of the Student class module
+'Enum type declaration omitted
+
+Private m_Student_ID As String
+Private m_FirstName As String
+Private m_LastName As String
+Private m_MajorCode As MajorCodeEnum
+Private m_YearLevel As YearLevelEnum
+Private m_BirthDate As Date
+Private m_Gender As GenderEnum
+<b>Private m_Address As Address		' Student address</b></pre>
+      </td>
+    </tr>
+</table>
+
+<h3>Property Set procedures</h3>
+<p>A <b> Property Set</b> procedure sets the value of a property that contains a
+reference to an <i>object</i>. When you assign a value to an object, you must use the
+Visual Basic <b><i>Set</i></b> statement. An example of a property which is an
+object itself would be the <i> Font</i> property of the <i> TextBox</i> control. Because you're
+dealing with object references, you must use the <b>Set</b> <i> </i>keyword in both
+procedures.&nbsp; Add the following property procedure and additional method, as well
+as the revised version of <b>StudentInfo</b> method in Student class module:</p>
+  <table cellPadding="5" width="669">
+    <tr>
+      <td bgcolor="#E2E2E2" width="648">
+        <pre>' Student Address property procedures
+Property Get Address() As Address 
+   Set Address = m_Address
+End Property 
+
+Property Set Address(ByVal strNewAddress As Address) 
+   Set m_Address = strNewAddress 
+End Property
+
+' New Student method
+Function StudentAddressInfo() As String
+    If m_Address Is Nothing Then Err.Raise 5
+    StudentAddressInfo = m_Address.CompleteAddress
+End Function
+
+' Student StudentInfo method revised
+Function StudentInfo(<b>Optional ByVal IncludedAddressInfo As Boolean = True</b>) As String
+' Returns the Student information
+<b>    Dim info As String</b>
+    
+    info = &quot;Student # : &quot; &amp; StudentID &amp; vbCrLf &amp; _
+           &quot;Name : &quot; &amp; FullName &amp; vbCrLf &amp; _
+           &quot;Age : &quot; &amp; Age &amp; vbCrLf &amp; _
+           &quot;Gender : &quot; &amp; GenderDescription &amp; vbCrLf &amp; _
+           &quot;Major Code : &quot; &amp; MajorCode &amp; vbCrLf &amp; _
+           &quot;Major Description: &quot; &amp; MajorCodeDescription &amp; vbCrLf &amp; _
+           &quot;Year Level : &quot; &amp; YearLevelDescription
+
+   <b> If IncludedAddressInfo Then info = info &amp; &quot;Address : &quot; &amp;  StudentAddressInfo()</b>
+                    
+    StudentInfo = info
+End Function
+</pre>
+      </td>
+    </tr>
+</table>
+<p>In our new <b><font face="Courier New" size="2">StudentAddressInfo</font></b>
+method, it is a good programming practice that you check first the existence of
+an object (<b>Address</b>) with in an object (<b>Student</b>), because a call to
+that method will raise an error number 91.</p>
+<p>Now you can create a <b> Address</b> object in client form, initialize its
+properties, and then assign it to the <i>Address</i> property&nbsp;of the <b>Student</b>
+object.</p>
+  <table cellPadding="5" width="662">
+    <tr>
+      <td bgcolor="#E2E2E2" width="646">
+        <pre>' In client form
+' Declare Student object and Address Object
+Dim Student As Student
+<b>Dim Address As Address</b>
+
+' Initiate the object Student
+Set Student = New Student
+
+<b>' Initiate the object Address
+Set Address = New Address</b>
+
+<b>' Set up Address properties
+With Address
+   .Street = &quot;Block 10 Lot 26, Molave Street, Calendola Village&quot;
+   .City = &quot;San Pedro&quot;
+   .State = &quot;Laguna&quot;
+   .Country = &quot;Philippines&quot;
+   .Zip = &quot;4023&quot;
+End With</b>
+
+' Set up Student pproperties
+With Student
+   .FullName = &quot;Dante Salvador&quot;
+ <b>  ' Add the newly created Address object to Student Address property
+   Set .Address = Address	</b>				
+   .StudentID = &quot;102472&quot;
+   .BirthDate = #10/24/1972#
+   .Gender = Male
+   .YearLevel = Senior
+   .Major = BSCS
+End With
+    
+' Show Student information
+MsgBox Student.StudentInfo
+ </pre>
+      </td>
+    </tr>
+</table>
+<h3>Variant Properties</h3>
+<p>You can add flexibility to your class by including a Variant member.&nbsp;
+Assuming that you want to implement a <i>ProvincialAddress</i> property, but you
+want to keep it more flexible and capable of storing either a <b>Address</b>
+object or a string.&nbsp;&nbsp; Now let us add <i>ProvincialAddress</i> property
+to our Student class as shown below:&nbsp;</p>
+<table cellPadding="5" width="660">
+  <tbody>
+    <tr>
+      <td width="644" bgcolor="#E2E2E2">
+        <pre>Private m_ProvincialAddress As Variant
+
+Property Get ProvincialAddress() As Variant
+    If IsObject(m_ProvincialAddress) Then
+        Set ProvincialAddress = m_CurrentAddress   ' Return a Address object.
+    Else
+        ProvincialAddress = m_ProvincialAddress    ' Return a string.
+    End If
+End Property
+
+Property Let ProvincialAddress(ByVal strNewProvincialAddress As Variant)
+    m_ProvincialAddress = strNewProvincialAddress
+End Property
+
+Property Set ProvincialAddress(ByVal strNewProvincialAddress As Variant)
+    Set m_ProvincialAddress = strNewProvincialAddress
+End Property
+
+' Revised StudentInfo method
+Function StudentInfo(Optional ByVal IncludeAddressInfo As Boolean = True, _
+                     <b>Optional ByVal IncludeProvincialAddressInfo As Boolean = False</b>) As String
+' Returns the Student information
+    Dim info As String
+    
+    info = &quot;Student # : &quot; &amp; StudentID &amp; vbCrLf &amp; _
+                  &quot;Name : &quot; &amp; FullName &amp; vbCrLf &amp; _
+                  &quot;Age : &quot; &amp; Age &amp; vbCrLf &amp; _
+                  &quot;Gender : &quot; &amp; GenderDescription &amp; vbCrLf &amp; _
+                  &quot;Major Code : &quot; &amp; MajorCode &amp; vbCrLf &amp; _
+                  &quot;Major Description: &quot; &amp; MajorCodeDescription &amp; vbCrLf &amp; _
+                  &quot;Year Level : &quot; &amp; YearLevelDescription
+
+    If IncludeAddressInfo Then info = info &amp; vbCrLf &amp; &quot;Address : &quot; &amp; StudentAddressInfo()
+    <b>If IncludeProvincialAddressInfo Then info = info &amp; vbCrLf &amp; &quot;Provincial Add : &quot; &amp; _
+                                         StudentProvincialAddInfo()</b>
+                 
+    StudentInfo = info
+End Function
+
+<b>' Newly added method for Student class
+Function StudentProvincialAddInfo() As String
+' Return Student Provincial address 
+    If IsObject(m_ProvincialAddress) Then
+       ' invoke Address CompleteAddress method
+        StudentProvincialAddInfo = m_ProvincialAddress.CompleteAddress
+    Else
+       ' simply return a string
+       StudentProvincialAddInfo = m_ProvincialAddress
+    End If
+End Function
+</b></pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>But things are a bit more complex if the property can receive either a
+regular value or an object value. While this sort of flexibility adds a lot of power to your class, it also
+reduces its robustness because nothing keeps a programmer from adding a
+nonstring value or an object of a class other than Address:</p>
+
+  <table cellPadding="5" width="669">
+    <tr>
+      <td bgcolor="#E2E2E2" width="653">
+        <pre>'In the client form
+
+With Student
+   .FullName = &quot;Dante Salvador&quot;
+   <b>Set .Address = 12345		' an Integer value	</b>				
+   .StudentID = &quot;102472&quot;
+   'etc  
+End With
+</pre>
+      </td>
+    </tr>
+</table>
+
+<p>Because <i>ProvincialAddress</i> property is declared as <b>Variant</b> type,
+meaning you can assign any value, including numeric type.&nbsp;&nbsp; To have more
+control of what is actually assigned to this property, you need to arbitrate all
+accesses to it through <i> Property</i> procedures:</p>
+<table cellPadding="5" width="667">
+  <tbody>
+    <tr>
+      <td width="661" bgcolor="#E2E2E2">
+        <pre>' In Student class module
+' Revised property procedures
+Property Let ProvincialAddress(ByVal strNewProvincialAddress As Variant)
+    <b>' Check if it is a string value.</b>
+    <b>If VarType(strNewProvincialAddress) &lt;&gt; vbString Then Err.Raise 5</b>
+    m_ProvincialAddress = strNewProvincialAddress
+End Property
+
+Property Set ProvincialAddress(ByVal strNewProvincialAddress As Variant)
+    <b>' Check if it is a Address object.
+    If TypeName(strNewProvincialAddress) &lt;&gt; &quot;Address&quot; Then Err.Raise 5</b>
+    Set m_ProvincialAddress = strNewProvincialAddress
+End Property
+
+'In the client form
+With Student
+   .FullName = &quot;Dante Salvador&quot;
+   <b>Set .Address = 12345		' this raises an error</b>
+   .StudentID = &quot;102472&quot;
+   'etc  
+End With
+</pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>Another technique that you can use that give slightly improve run-time
+performances and you save some code is to declare the type of the object you're expecting
+right in the parameter list of the <i>Property Set</i>  procedure:</p>
+<table cellPadding="5" width="664">
+  <tbody>
+    <tr>
+      <td width="662" bgcolor="#E2E2E2">
+        <pre>Property Set ProvincialAddress(ByVal strNewProvincialAddress As <b>Address</b>)
+    ' Check if it is a Address object.
+    If TypeName(strNewProvincialAddress) &lt;&gt; &quot;Address&quot; Then Err.Raise 5
+    Set m_ProvincialAddress = strNewProvincialAddress
+End Property</pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>But&nbsp; you can't use
+it when if your class accept two or more objects of different types. One
+solution is use&nbsp;<i>As Object</i> parameter:</p>
+<table cellPadding="5" width="662">
+  <tbody>
+    <tr>
+      <td width="661" bgcolor="#E2E2E2">
+        <pre>Property Set ProvincialAddress(ByVal strNewProvincialAddress As <b>Object</b>)
+    If TypeName(strNewProvincialAddress) &lt;&gt; &quot;Address&quot; <b>And _
+       TypeName(strNewProvincialAddress) &lt;&gt; &quot;OtherAddressType&quot;</b> Then Err.Raise 5
+    Set m_CurrentAddress = newValue
+End Property</pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<table cellPadding="5" width="661">
+  <tr>
+    <td bgcolor="#E2E2E2" width="645">
+      <h3><b>Object Keyword<br>
+      </h3>
+      </b><a name="261">
+      <p>The <b><i>TypeName</i></b> function</p>
+      </a>
+      <blockquote>
+        <p>The <i>TypeName</i> function returns the name of an object's class in
+        the form of a string. This means that you can find the type of an object
+        in a more concise form</p>
+        <p>In many situations, testing an object's type using the <i>TypeName</i>
+        function is preferable to using the <i>TypeOf...Is</i> statement because
+        it doesn't require that the object class be present in the current
+        application or in the References dialog box.&nbsp; For information about
+        <i>TypeOf...Is</i> function, consult your Visual Basic documentation.</p>
+      </blockquote>
+      <a name="261">
+      <p>The <b><i>VarType</i></b> function</p>
+      </a>
+      <blockquote>
+        <p>The <i>VarType</i> function returns the type name of an object's
+        class in the form of a string. Variant variables can also host special
+        values that don't correspond to any data values described so far. The <i>Empty</i><b>
+        </b>value is the state of a Variant variable when nothing has been
+        assigned to it yet. You can test this special value using the <i>IsEmpty</i>
+        function, or you can test the <i>VarType</i> function for the value
+        0-vbEmpty.&nbsp;</p>
+        <p>The Null value is useful in database programming to mark fields that
+        don't contain a value. You can explicitly assign the Null value to a
+        Variant using the Null<i> </i>constant, test for a Null value using the <i>IsNull</i>
+        function, or compare the return value of the <i>VarType</i> function
+        with the value 1-vbNull.&nbsp; For more information about this function,
+        consult your Visual Basic documentation.</p>
+      </blockquote>
+    </td>
+  </tr>
+</table>
+<h3>Advanced Uses of Methods</h3>
+<p>In our previous example, our <i> Address</i> property of the <b> Student</b> class is
+responsible for proper format of the Student address.&nbsp; For instance, let us pretend that it takes a
+lot of processing time to evaluate its result and return the value. If you trace the
+execution of the program it executes all the <b> Property Get</b> in order to construct
+the correct address format, which we're surely like that the class would do.&nbsp;
+But add the <b>Debug.Print</b> statement below:</p>
+<table cellPadding="5" width="662">
+    <tr>
+      <td width="661" bgcolor="#E2E2E2">
+        <pre>' Other client form code omitted
+' Show Student information in the client form
+MsgBox Student.StudentInfo(, True)
+
+' Call the Student StudentAddressInfo method
+Debug.Print Student.StudentAddressInfo		' Add this code</pre>
+      </td>
+    </tr>
+</table>
+<p>The code above demonstrate the overhead of calling Student address even if we
+don't change address information of the student.&nbsp; In other words, the class
+(<b>Address</b>) always evaluate (run) the<b> Property Get</b> even if it is not
+necessary to do so because it highly dependent on the independet (such as <i>Street</i>,
+<i>City</i>, <i>State</i>, <i> Zip</i> and <i>Country</i>) <i>Property</i> value. So
+how can we modify this function to keep the
+overhead to a minimum without modifying the interface that the class exposes to
+the outside.&nbsp; A common sense solution we case use is don't to reevaluate it
+(all independent property, such as Street, City, State, Zip and Country) each time the client code makes a request.
+Right! But how?&nbsp; We can store the return value in a<b> Private Variant</b>
+variable before returning to the client and reuse that value if possible in all
+subsequent calls. The trick works because each time either <i>Street</i>, <i>City</i>,
+<i>State</i>, <i>
+Zip</i> or <i> Country</i> are assigned a new value, the <b>Private</b> variable is cleared,
+which forces it to be reevaluated the next time the <i>CompleteAddress</i>
+function is invoked.&nbsp;</p>
+<table cellPadding="5" width="662">
+    <tr>
+      <td width="661" bgcolor="#E2E2E2">
+        <pre>' In Address class module declaration
+' Other Private member variable omitted
+<b>Private m_CompleteAddress As Variant	</b>
+</pre>
+        <pre>Public Property Let Street(ByVal strNewStreet As String)
+    If Len(strNewStreet) = 0 Then Err.Raise 5
+    m_Street = strNewStreet
+<b>    m_CompleteAddress = Empty	' add this line in every Property Let Procedures</b>
+End Property
+' Other Property Let procedure ommited
+
+' Revised CompleteAddress Method
+Public Function CompleteAddress() As String
+    <b>If IsEmpty(m_CompleteAddress) Then
+        m_CompleteAddress = Street &amp; vbCrLf &amp; City &amp; &quot;, &quot; &amp; _
+                            State &amp; &quot; &quot; &amp; Country &amp; &quot; &quot; &amp; Zip
+    End If</b>
+    CompleteAddress = <b>m_CompleteAddress</b>
+End Function
+</pre>
+      </td>
+    </tr>
+</table>
+<p>If trace again the program execution (Pressing F8), the second time you
+invoke the <i>CompleteAddress</i> method (via <i>StudentAddressInfo</i> method
+of <b>Student</b> class), the class smartly save the previous result and return
+it.&nbsp; You might ask &quot;We implement this technique to the Address object,
+why we did not implement this to Student class, is it possible?&quot;&nbsp; Yes
+of course, but&nbsp; you must understand that a class should be robust, and to
+be a robust class, the class should be responsible for himself!&nbsp; As you can
+see, even if the <i>CompleteAddress</i> method are highly dependent on
+independent properties,&nbsp; it access it dependent property in <b>Address</b>
+class in which <i>CompleteAddress</i> is also included.&nbsp; Now lets go back
+to the topic, one last note, don't underestimate the advantage of this
+technique, because in a real-world application, this difference might involve
+unnecessarily opening a database, reestablishing a remote connection, and so on.</p>
+<h4>Initialization Method</h4>
+<p>We already explained that the class to be robust, it must always contains a
+valid value.&nbsp; And to achieve this objectives, we provide our class a <i>Property
+procedures</i> and <i>methods</i> to transform the internal data of the class to
+a valid state by providing validation code inside this procedures.&nbsp;
+However, if you are familiar with C++ and Java, you might be asking, what if an
+object is used immediately after creation of the object or during the creation
+of the object in the client side and how can we provide the user or client a
+initial valid values? We can provide the client some useful initial valid value
+in the<b> <i>Class_Initialize</i></b> event procedure, without having to specify
+it in the client code. Visual Basic offers a neat way by writing some statements
+in the <i><b>Class_Initialize</b></i> event of the class module. To have the
+editor create a template for this event procedure, you select the Class item in
+the leftmost combo box in the code editor. Visual Basic automatically selects
+the <i>Initialize</i> item from the rightmost combo box control and inserts the
+template into the code window.&nbsp;</p>
+<p><img border="0" src="series1.gif" width="425" height="188"></p>
+<p>Because we are dealing with the Student class object, you can provide a
+reasonable value for client to expect in its <i>Country</i> property of the <i>Address</i>
+object property of the <b>Student</b>. For example, &quot;Philippines&quot; or
+whatever nationality appropriate where you live. In this, you would like for
+these default values to be assigned when you create an object, rather than,
+having assign them manually in the code that uses the class.</p>
+<table cellPadding="5" width="662">
+    <tr>
+      <td width="661" bgcolor="#E2E2E2">
+        <pre>' In Address class module
+Private Sub Class_Initialize()
+    m_Country = &quot;Philippines&quot;
+End Sub</pre>
+      </td>
+    </tr>
+</table>
+<p>If you trace the program, you will see that as soon as Visual Basic creates
+the object (the <i>Set</i> command in the form module), the <i><b>Class_Initialize</b></i>
+event fires. The object is returned to the caller with all the properties
+correctly initialized, and you don't have to assign them in an explicit way.</p>
+<p>But this solution might be not enough for us.&nbsp; We just solve the second
+problem stated above. What happens if an object is used immediately after its
+creation. Consider this example:
+</p>
+<table cellPadding="5" width="662">
+    <tr>
+      <td width="661" bgcolor="#E2E2E2">
+        <pre>' In the Client form
+Set Student = New Student
+Debug.Print Student.FirstName ' &lt;&lt; this will display nothing
+Debug.Print Student.FullName  ' &lt;&lt; this will raise an error
+</pre>
+      </td>
+    </tr>
+</table>
+<p>In other programming language, this problem is solved by defining a
+special procedure that is defined in the class module and executed whenever a
+new instance is create, just like C++ and Java constructor.&nbsp; Because Visual
+Basic completely lack of constructor method, you can't prevent the user of your
+class from using the object as soon as they create it.&nbsp; The best solution
+that you can do is create simulated constructor method that correctly initialize
+all (if you desire) the properties and let the user know that they can initialize
+the object in a short way.</p>
+<table cellPadding="5" width="662">
+    <tr>
+      <td width="661" bgcolor="#E2E2E2">
+        <pre>' In the Address class module 
+Public Sub InitAddress(Optional ByVal Street As Variant, _
+                       Optional ByVal City As Variant, _
+                       Optional ByVal State As Variant, _
+                       Optional ByVal Zip As Variant, _
+                       Optional ByVal Country As Variant)
+    
+    If Not IsMissing(Street) Then Me.Street = Street
+    If Not IsMissing(City) Then Me.City = City
+    If Not IsMissing(State) Then Me.State = State
+    If Not IsMissing(Zip) Then Me.Zip = Zip
+    If Not IsMissing(Country) Then Me.Country = Country
+    
+End Sub
+
+' In the Student class module 
+Public Sub InitStudent(Optional ByVal StudentID As Variant, _
+                       Optional ByVal FirstName As Variant, _
+                       Optional ByVal LastName As Variant, _
+                       Optional ByVal Major As MajorCodeEnum = Freshmen, _
+                       Optional ByVal YearLevel As YearLevelEnum = BSCS, _
+                       Optional ByVal BirthDate As Variant, _
+                       Optional ByVal Gender As GenderEnum = Male, _
+                       Optional ByVal Address As Variant, _
+                       Optional ByVal ProvincialAddress As Variant)
+
+    If Not IsMissing(StudentID) Then Me.StudentID = StudentID
+    If Not IsMissing(FirstName) Then Me.FirstName = FirstName
+    If Not IsMissing(LastName) Then Me.LastName = LastName
+    If Not IsMissing(Major) Then Me.Major = Major
+    If Not IsMissing(YearLevel) Then Me.YearLevel = YearLevel
+    If Not IsMissing(BirthDate) Then Me.BirthDate = BirthDate
+    If Not IsMissing(Gender) Then Me.Gender = Gender
+    If Not IsMissing(Address) Then _
+       Set Me.Address = Address     ' Set command is necessary
+    If Not IsMissing(ProvincialAddress) Then _
+       Set Me.ProvincialAddress = ProvincialAddress ' also here
+    
+End Sub</pre>
+      </td>
+    </tr>
+</table>
+<p>Now you can tell the user of your class, to use your newly created simulated
+constructor:</p>
+<table cellPadding="5" width="662">
+    <tr>
+      <td width="661" bgcolor="#E2E2E2">
+        <pre>' In the Client form
+' Initiate the object Student
+Set Student = New Student
+Set Address = New Address
+Set ProvincialAdd = New Address
+     
+' Set up Address
+Address.InitAddress &quot;Block 10 Lot 26, Molave Street, Calendola Village&quot;, _
+                    &quot;San Pedro&quot;, _
+                    &quot;Laguna&quot;, _
+                    &quot;4023&quot;
+    
+' Set up Provincial address
+ProvincialAdd.InitAddress &quot;Block 10 Lot 26, Molave Street, Calendola Village&quot;, _
+                          &quot;San Pedro&quot;, _
+                          &quot;Laguna&quot;, _
+                          &quot;4023&quot;
+                        
+' Set up Student
+Student.InitStudent &quot;12345&quot;, &quot;Dante&quot;, &quot;Salvador&quot;, _
+                    BSCS, Senior, #10/24/1972#, Male, _
+                    Address, ProvincialAdd
+    
+' Other code omitted</pre>
+      </td>
+    </tr>
+</table>
+<p>As you can see, we adopt optional arguments of type Variant because it is
+essential that you use the <b>IsMissing</b> function and bypass the assignment
+of values that were never provided by the client.&nbsp; The good consequence of
+this approach is that, we can use default value to the parameter list as shown
+in <b>InitStudent</b> method. We also use the same names of the properties they
+refer to, this makes the method easier to use and to avoid name conflict inside
+the procedure, we use <b>Me</b> keyword to refer to the real properties of the
+class.</p>
+<p>Now, to add more usability of your class, you can provide a function in a BAS
+module in your application that return a newly created object of your class:</p>
+<table cellPadding="5" width="662">
+    <tr>
+      <td width="661" bgcolor="#E2E2E2">
+        <pre>' In the Standard module of your application
+Public Function New_Student(Optional ByVal StudentID As Variant, _
+                            Optional ByVal FirstName As Variant, _
+                            Optional ByVal LastName As Variant, _
+                            Optional ByVal Major As MajorCodeEnum = Freshmen, _
+                            Optional ByVal YearLevel As YearLevelEnum = BSCS, _
+                            Optional ByVal BirthDate As Variant, _
+                            Optional ByVal Gender As GenderEnum = Male, _
+                            Optional ByVal Address As Variant, _
+                            Optional ByVal ProvincialAddress As Variant) As Student
+
+    ' Initiate an object Student
+    Set New_Student = New Student
+
+    ' Call InitStudent method
+    New_Student.InitStudent StudentID, FirstName, LastName, MAJOR_CODE_MAX, _
+                            YearLevel, BirthDate, Gender, _
+                            Address, ProvincialAddress
+End Function
+
+Public Function New_Address(Optional ByVal Street As Variant, _
+                            Optional ByVal City As Variant, _
+                            Optional ByVal State As Variant, _
+                            Optional ByVal Zip As Variant, _
+                            Optional ByVal Country As Variant) As Address
+
+    ' Initiate an Address object
+    Set New_Address = New Address
+
+    ' Call InitAddress method
+    New_Address.InitAddress Street, City, State, Zip, Country
+
+End Function</pre>
+      </td>
+    </tr>
+</table>
+<p>See how concise your code in the client form:</p>
+<table cellPadding="5" width="662">
+    <tr>
+      <td width="661" bgcolor="#E2E2E2">
+        <pre>' In client form
+' Declare Student object
+Dim Student As Student
+Dim Address As Address
+Dim ProvincialAdd As Address
+
+' Initiate and create Address object
+Set Address = New_Address(&quot;Block 10 Lot 26, Molave Street, &quot; &amp; _
+                          &quot;Calendola Village&quot;, _
+                          &quot;San Pedro&quot;, _
+                          &quot;Laguna&quot;, _
+                          &quot;4023&quot;)
+
+' Initiate and create Provincial Address object
+Set ProvincialAdd = New_Address(&quot;Block 10 Lot 26, Molave Street, &quot; &amp; _
+                                &quot;Calendola Village&quot;, _
+                                &quot;San Pedro&quot;, _
+                                &quot;Laguna&quot;, _
+                                &quot;4023&quot;)
+
+' Initiate and create Student object
+Set Student = New_Student(&quot;12345&quot;, &quot;Dante&quot;, &quot;Salvador&quot;, _
+                           BSCS, Senior, #10/24/1972#, Male, _
+                           Address, ProvincialAdd)
+' Show Student information
+MsgBox Student.StudentInfo(, True)</pre>
+      </td>
+    </tr>
+</table>
+<p>You can add a little spice to your function, by assigning the <i> Address</i>
+property value to the <i> ProvincialAddress</i> property, if the <b> Student</b>
+lives in the same address.</p>
+<table cellPadding="5" width="662">
+    <tr>
+      <td width="661" bgcolor="#E2E2E2">
+        <pre>' In the Standard module of your application
+Public Function New_Student(Optional ByVal StudentID As Variant, _
+                            Optional ByVal FirstName As Variant, _
+                            Optional ByVal LastName As Variant, _
+                            Optional ByVal Major As MajorCodeEnum = Freshmen, _
+                            Optional ByVal YearLevel As YearLevelEnum = BSCS, _
+                            Optional ByVal BirthDate As Variant, _
+                            Optional ByVal Gender As GenderEnum = Male, _
+                            Optional ByVal Address As Variant, _
+                            Optional ByVal ProvincialAddress As Variant) As Student
+    ' Initiate an object Student
+    Set New_Student = New Student
+
+    ' Assign the same adddress if ProvincialAddress is not set
+    <b>If IsMissing(ProvincialAddress) Then Set ProvincialAddress = Address</b>
+
+    ' Call InitStudent method
+    New_Student.InitStudent StudentID, FirstName, LastName, MAJOR_CODE_MAX, _
+                            YearLevel, BirthDate, Gender, _
+                            Address, ProvincialAddress
+End Function
+
+' In client form
+Dim Student As Student
+Dim Address As Address
+    
+' Initiate and create Address object
+Set Address = New_Address(&quot;Block 10 Lot 26, Molave Street, &quot; &amp; _
+                          &quot;Calendola Village&quot;, _
+                          &quot;San Pedro&quot;, _
+                          &quot;Laguna&quot;, _
+                          &quot;4023&quot;)
+
+' Initiate and create Student object
+Set Student = New_Student(&quot;12345&quot;, &quot;Dante&quot;, &quot;Salvador&quot;, _
+                           BSCS, Senior, #10/24/1972#, Male, _
+                           Address)
+' Show Student information
+MsgBox Student.StudentInfo(, True)
+    
+' Change the provincial address if you will
+With Student
+  With .ProvincialAddress
+     .Street = &quot;830 Euclid Avenue&quot;
+     .City = &quot;Cleveland&quot;
+     .State = &quot;Ohio&quot;
+     .Zip = &quot;44114&quot;
+     .Country = &quot;USA&quot;
+  End With
+End With
+
+' Show Student provincial address info
+MsgBox Student.StudentProvincialAddInfo</pre>
+      </td>
+    </tr>
+</table>
+<h3>Reference:</h3>
+<p>Visual Basic Help Online: Microsoft Corporation </p>
+<h3>Still to Come</h3>
+<p>In the next article, We're going to discuss about Collection Classes</p>
+</blockquote>
+</body>
+
+</html>
+
